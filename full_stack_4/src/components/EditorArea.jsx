@@ -1,12 +1,14 @@
-function EditorArea({ text, setText }) {
-    return (
-      <textarea
-        className="w-full h-40 p-2 border rounded-md resize-none"
-        placeholder="הקלד כאן..."
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        style={{ direction: "rtl" }}
-      />
-    );
+import VirtualKeyboard from "./VirtualKeyboard";
+function EditorArea({onKeyPress}) {
+
+  return (
+    <div className="p-4 border rounded-xl shadow-md bg-gray-100">
+      {/* add here more edit components*/}
+      <VirtualKeyboard onKeyPress={onKeyPress} />
+    </div>
+  );
   }
 export default EditorArea;
+
+import VirtualKeyboard from "./VirtualKeyboard";
+

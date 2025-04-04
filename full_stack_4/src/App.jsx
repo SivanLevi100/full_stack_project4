@@ -1,9 +1,8 @@
 import { useState } from "react";
 import TextDisplay from "./components/TextDisplay";
-import TextArea from "./components/EditorArea";
-import VirtualKeyboard from "./components/VirtualKeyboard";
+import EditorArea from "./components/EditorArea";
 
-export default function TextEditorApp() {
+export default function App() {
   const [text, setText] = useState("");
 
   const handleKeyPress = (char) => {
@@ -13,8 +12,7 @@ export default function TextEditorApp() {
   return (
     <div className="p-4 grid gap-4 grid-rows-[auto_1fr_auto] h-screen">
       <TextDisplay text={text} />
-      <TextArea text={text} setText={setText} />
-      <VirtualKeyboard onKeyPress={handleKeyPress} />
+      <EditorArea onKeyPress={handleKeyPress} />
     </div>
   );
 }

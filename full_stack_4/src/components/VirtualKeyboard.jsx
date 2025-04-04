@@ -1,14 +1,24 @@
 import KeyboardKey from "./KeyboardKey";
-
+const EnglishKeyboardLayout = [
+    ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+    ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';'],
+    ['z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '?'],
+    ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')'],
+    [' '] // שורת רווח
+  ];
 function VirtualKeyboard({ onKeyPress }) {
-  return (
-    <div className="flex gap-2">
-      <KeyboardKey char="A" onKeyPress={onKeyPress} />
-      <KeyboardKey char="B" onKeyPress={onKeyPress} />
-      <KeyboardKey char="C" onKeyPress={onKeyPress} />
-
-    </div>
-  );
+    return (
+        <div className="flex flex-col gap-2 items-center">
+          {EnglishKeyboardLayout.map((row, rowIndex) => (
+            <div key={rowIndex} className="flex gap-1">
+              {row.map((char, i) => (
+                <KeyboardKey key={i} char={char} onKeyPress={onKeyPress} />
+              ))}
+            </div>
+          ))}
+        </div>
+      );
 }
 export default VirtualKeyboard;
 
