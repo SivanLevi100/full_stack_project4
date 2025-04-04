@@ -6,7 +6,13 @@ export default function App() {
   const [text, setText] = useState("");
 
   const handleKeyPress = (char) => {
-    setText(prev => prev + char);
+    if (char === "Space") {
+      setText(prev => prev + " "); //add space
+    } else if (char === "Backspace") {
+      setText(prev => prev.slice(0, -1)); // delete last char
+    } else {
+      setText(prev => prev + char); // add char
+    }
   };
 
   return (

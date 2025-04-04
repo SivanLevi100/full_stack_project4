@@ -10,5 +10,4 @@ function EditorArea({onKeyPress}) {
   }
 export default EditorArea;
 
-import VirtualKeyboard from "./VirtualKeyboard";
 
