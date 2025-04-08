@@ -7,7 +7,7 @@ export default function App() {
 
   const handleKeyPress = (char) => {
     if (char === "Space") {
-      setText(prev => prev + " "); //add space
+      setText(prev => prev + ' '); //add space
     } else if (char === "Backspace") {
       setText(prev => prev.slice(0, -1)); // delete last char
     } else {
@@ -16,9 +16,9 @@ export default function App() {
   };
 
   return (
-    <div className="p-4 grid gap-4 grid-rows-[auto_1fr_auto] h-screen">
+    <div className="app-container">
       <TextDisplay text={text} />
       <EditorArea onKeyPress={handleKeyPress} />
     </div>
   );
-}
+} 
