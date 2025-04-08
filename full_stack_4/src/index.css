@@ -26,14 +26,14 @@ body {
   justify-content: flex-end;
   gap: 1rem;
   width: 100%;
-  max-width: 800px;
+  max-width: 80vw;
   margin: 0 auto;
 }
 
 .text-display, .editor-area {
   border-radius: 8px;
   padding: 1rem; 
-  max-width: 800px; 
+  max-width: 100%; 
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
   text-align: center;  
   width: 100%;
@@ -53,6 +53,7 @@ body {
   margin: 0.1em;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
+  transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
 }
 
 .keyboard-key:hover {
@@ -79,7 +80,12 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 1rem;
 }
-
+.keyboard-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 ;
+}
 .editor-area {
   width: 100%;
   min-height: 100px;
@@ -89,4 +95,12 @@ body {
   background-color: #2a3b4c;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-top: 1rem;
+  display: flex;
+  flex-direction: row
+}
+.delete-keys {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-left: 1rem;
 }
