@@ -7,7 +7,6 @@ const keyboardLayouts = {
       ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';'],
       ['z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '?'],
       ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')'],
-      ['Space'] 
     ],
     hebrew: [
       ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
@@ -15,7 +14,6 @@ const keyboardLayouts = {
       ['ש', 'ד', 'ג', 'כ', 'ע', 'י', 'ח', 'ל', 'ך', 'ף'],
       ['ז', 'ס', 'ב', 'ה', 'נ', 'מ', 'צ', 'ת', 'ץ', '?'],
       ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')'],
-      ['Space'] 
     ],
     emoji: [
       ['😀', '😂', '😊', '😍', '😎', '🤔', '😴', '😳', '😭', '😡'],
@@ -23,16 +21,15 @@ const keyboardLayouts = {
       ['❤️', '💔', '💖', '💙', '💯', '💤', '💨', '💦', '💫', '⭐'],
       ['🔥', '⚡', '☀️', '🌙', '☁️', '🌈', '🍀', '🌹', '🌸', '🍂'],
       ['🐶', '🐱', '🐭', '🐼', '🐵', '🦁', '🐯', '🦊', '🐻', '🐨'],
-      ['Space'] 
     ]
   };
 
 function VirtualKeyboard({ onKeyPress ,layout}) {
   const currentLayout = keyboardLayouts[layout] || keyboardLayouts.english; // Default to English if no layout is provided
     return (
-        <div className="keyboard-container">
+        <div className="keyboard">
           {currentLayout.map((row, rowIndex) => (
-            <div key={rowIndex} className="flex gap-1">
+            <div key={rowIndex} className="keyboard-row">
               {row.map((char, i) => (
                 <KeyboardKey key={i} char={char} onKeyPress={onKeyPress} />
               ))}

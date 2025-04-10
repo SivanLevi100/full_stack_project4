@@ -2,9 +2,10 @@ import VirtualKeyboard from "./VirtualKeyboard";
 import DeleteKeys from "./DeleteKeys";
 import KeyboardSwitcher from "./KeyboardSwitcher";
 import { useState } from "react";
+import SpaceKey from "./SpaceKey";
 
 
-function EditorArea({ onKeyPress, onDeleteAll, onDeleteChar }) {
+function EditorArea({ onKeyPress, onSpacePress, onDeleteAll, onDeleteChar }) {
   const [currentLayout, setCurrentLayout] = useState("english");
 
   const handleSwitchLayout = (layout) => {
@@ -17,10 +18,15 @@ function EditorArea({ onKeyPress, onDeleteAll, onDeleteChar }) {
         currentLayout={currentLayout}
         onSwitchLayout={handleSwitchLayout}
       />
-      <VirtualKeyboard 
+      <div className="keyboard-container">
+        <VirtualKeyboard 
         onKeyPress={onKeyPress} 
         layout={currentLayout}
-      />
+        />
+        <SpaceKey
+        onSpacePress={onSpacePress}
+        />
+      </div>
       <DeleteKeys 
         onDeleteAll={onDeleteAll} 
         onDeleteChar={onDeleteChar} 

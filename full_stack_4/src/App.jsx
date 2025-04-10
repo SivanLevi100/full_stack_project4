@@ -6,7 +6,10 @@ export default function App() {
   const [text, setText] = useState("");
 
   const handleKeyPress = (char) => {
-    setText((prev) => prev + (char === "Space" ? " " : char));
+    setText((prev) => prev + char); // add char to text
+  };
+  const handleSpacePress = () => {
+    setText((prev) => prev + ' '); // add space to text
   };
 
   const HandleDeleteAll = () => {
@@ -22,6 +25,7 @@ export default function App() {
       <TextDisplay text={text} />
       <EditorArea
         onKeyPress={handleKeyPress}
+        /*onSpacePress={handleSpacePress}*/
         onDeleteAll={HandleDeleteAll}
         onDeleteChar={HandleDeleteChar}
       />
