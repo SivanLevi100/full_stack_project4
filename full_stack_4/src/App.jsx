@@ -3,29 +3,68 @@ import TextDisplay from "./components/TextDisplay";
 import EditorArea from "./components/EditorArea";
 
 export default function App() {
-  const [text, setText] = useState("");
+  const [notes, setNotes] = useState([{ id: 1, text: "" }]); // מתחילים עם פתק אחד
+  const [selectedNoteId, setSelectedNoteId] = useState(1);
 
   const handleKeyPress = (char) => {
-    setText((prev) => prev + char); // add char to text
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.id === selectedNoteId
+          ? { ...note, text: note.text + char }
+          : note
+      )
+    );
   };
+
   const handleSpacePress = () => {
-    setText((prev) => prev + ' '); // add space to text
+    handleKeyPress(" ");
   };
 
   const HandleDeleteAll = () => {
-    setText(""); // delete all text
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.id === selectedNoteId ? { ...note, text: "" } : note
+      )
+    );
   };
 
   const HandleDeleteChar = () => {
-    setText((prev) => prev.slice(0, -1)); // delete last char
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.id === selectedNoteId
+          ? { ...note, text: note.text.slice(0, -1) }
+          : note
+      )
+    );
+  };
+
+  const handleAddNote = () => {
+    if (notes.length < 6) {
+      const newNote = { id: Date.now(), text: "" }; 
+      setNotes((prevNotes) => [...prevNotes, newNote]);
+      setSelectedNoteId(newNote.id); 
+    }
+  };
+
+  const handleDeleteNote = (id) => {
+    setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
+    if (selectedNoteId === id) {
+      setSelectedNoteId(null); // Deselect the note if it's deleted
+    }
   };
 
   return (
     <div className="app-container">
-      <TextDisplay text={text} />
+      <TextDisplay
+        notes={notes}
+        selectedNoteId={selectedNoteId}
+        onSelectNote={setSelectedNoteId}
+        onDeleteNote={handleDeleteNote}
+        onAddNote={handleAddNote}
+      />
       <EditorArea
         onKeyPress={handleKeyPress}
-        /*onSpacePress={handleSpacePress}*/
+        onSpacePress={handleSpacePress}
         onDeleteAll={HandleDeleteAll}
         onDeleteChar={HandleDeleteChar}
       />
