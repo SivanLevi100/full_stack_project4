@@ -8,6 +8,7 @@
   height: 100%;
 }
 
+
 body {
   margin: 0;
   display: flex;
@@ -37,7 +38,30 @@ body {
   text-align: center;  
   width: 100%;
   margin-top: 2rem;
+
 }
+
+.text-display {
+  flex-grow: 1;
+  min-height: 150px;
+  max-height: 300px;
+  max-width: 100%; 
+  overflow-y: auto;
+  font-size: clamp(0.5rem, 2vw, 1.5em);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  width: 100%;
+  text-align: left;
+  color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #2a3b4c;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
 
 
 
@@ -63,25 +87,6 @@ body {
   color: #ffffff;
 }
 
-.text-display {
-  flex-grow: 1;
-  min-height: 150px;
-  max-height: 300px;
-  overflow-y: auto;
-  font-size: clamp(0.5rem, 2vw, 1.5em);
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
-  width: 100%;
-  text-align: left;
-  color: #ffffff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1rem;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1rem;
-}
 
 .keyboard-container {
   display: flex;

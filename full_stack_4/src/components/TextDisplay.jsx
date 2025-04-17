@@ -14,8 +14,8 @@ function TextDisplay({ text, textStyle }) {
 
 export default TextDisplay;
 
-/*
 
+/*
 function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote, onAddNote }) {
   return (
     <div className="text-display">
@@ -42,7 +42,9 @@ function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote, onAddN
           </div>
         ))}
       </div>
+    </div>
+  );
+}
 
 
-
-*/
+export default TextDisplay;*/
