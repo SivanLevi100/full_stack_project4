@@ -1,3 +1,5 @@
+//Keyboard key component
+
 function KeyboardKey({ char, onKeyPress }) {
     return (
       <button

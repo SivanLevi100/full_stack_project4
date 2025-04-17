@@ -37,7 +37,10 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
   text-align: center;  
   width: 100%;
+  margin-top: 2rem;
 }
+
+
 
 .keyboard-key {
   border-radius: 8px;
@@ -103,4 +106,233 @@ body {
   flex-direction: column;
   gap: 0.5rem;
   margin-left: 1rem;
+}
+
+
+/*שפות במקלדת*/
+.language-switcher {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  background-color: #2a3b4c;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #ffffff;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.language-button {
+  background-color: #f9f9f9;
+  color: #213547;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.language-button:hover {
+  background-color: #2a3b4c;
+  color: #ffffff;
+}
+
+.language-button.active {
+  background-color: #213547;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+
+/* TextStyleControls - עיצוב הטקטס*/
+.text-style-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: #2a3b4c;
+  border: 1px solid #ffffff;
+  border-radius: 8px;
+  padding: 1rem;
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  margin: 1rem auto;
+  max-width: 240px;
+}
+
+.style-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.style-section label {
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.style-section select {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  color: #213547;
+  font-family: inherit;
+}
+
+.color-options {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.color-option {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.color-option:hover {
+  transform: scale(1.2);
+  border-color: #f9f9f9;
+}
+
+.text-formatting {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.text-formatting button {
+  background-color: #f9f9f9;
+  color: #213547;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.text-formatting button:hover {
+  background-color: #213547;
+  color: #ffffff;
+}
+
+
+/*כלי עריכה מתקדמים*/
+
+.advanced-edit-operations {
+  background-color: #2a3b4c;
+  border: 1px solid #ffffff;
+  border-radius: 8px;
+  padding: 1rem;
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 240px;
+  margin: 1rem auto;
+}
+
+.search-replace-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.input-group input {
+  flex-grow: 1;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  font-family: inherit;
+  background-color: #ffffff;
+  color: #213547;
+  width: 45px;
+}
+
+.input-group button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  color: #213547;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease, color 0.2s ease;
+ 
+}
+
+.input-group button:hover {
+  background-color: #213547;
+  color: #ffffff;
+}
+
+.undo-button {
+  align-self: flex-end;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  background-color: #f44336;
+  color: #ffffff;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.2s ease;
+}
+
+.undo-button:hover {
+  background-color: #c0392b;
+}
+/*****************************************************************/
+.editor-wrapper {
+  display: flex;
+  gap: 2rem;
+  padding: 1rem;
+  align-items: flex-start;
+  background-color:  #2a3b4c;;
+  border-radius: 12px;
+}
+
+.side-panel {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* צמצום הרווח בין הקומפוננטות */
+  padding: 0.5rem;
+  background-color: #324368;
+  border-radius: 10px;
+}
+
+
+.main-panel {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem; 
 }

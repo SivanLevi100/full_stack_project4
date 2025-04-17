@@ -1,3 +1,5 @@
+//Delete button component
+
 import React from 'react';
 
 const DeleteKeys = ({ onDeleteAll, onDeleteChar }) => {
