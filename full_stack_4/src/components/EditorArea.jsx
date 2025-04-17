@@ -2,13 +2,25 @@
 /*
 import VirtualKeyboard from "./VirtualKeyboard";
 import DeleteKeys from "./DeleteKeys";
+import KeyboardSwitcher from "./KeyboardSwitcher";
+import { useState } from "react";
+import SpaceKey from "./SpaceKey";
 
-function EditorArea({ onKeyPress, onDeleteAll, onDeleteChar }) {
+
+function EditorArea({ onKeyPress, onSpacePress, onDeleteAll, onDeleteChar }) {
+  const [currentLayout, setCurrentLayout] = useState("english");
+
+  const handleSwitchLayout = (layout) => {
+    setCurrentLayout(layout);
+  };
   return (
     <div className="editor-area">
+
       
       <VirtualKeyboard onKeyPress={onKeyPress} />
       <DeleteKeys onDeleteAll={onDeleteAll} onDeleteChar={onDeleteChar} />
+
+
     </div>
   );
 }
@@ -31,36 +43,7 @@ function EditorArea({
   onSearchReplace,
   onUndo
 }) {
-  /*return (
-    <div className="editor-area">
-      <TextStyleControls onStyleChange={onStyleChange} />
-      <AdvancedEditOperations 
-        text={text}
-        onSearchReplace={onSearchReplace} 
-        onUndo={onUndo} 
-      />
-      <VirtualKeyboard onKeyPress={onKeyPress} />
-      <DeleteKeys onDeleteAll={onDeleteAll} onDeleteChar={onDeleteChar} />
-      
-    </div>
-  );*/
-  /*return (
-    <div className="editor-area">
-      <div className="side-panel">
-        <TextStyleControls onStyleChange={onStyleChange} />
-        <AdvancedEditOperations 
-          text={text}
-          onSearchReplace={onSearchReplace} 
-          onUndo={onUndo} 
-        />
-      </div>
-      <div className="keyboard-panel">
-        <VirtualKeyboard onKeyPress={onKeyPress} />
-        
-      </div>
-      <DeleteKeys onDeleteAll={onDeleteAll} onDeleteChar={onDeleteChar} />
-    </div>
-  );*/
+
   return (
     <div className="editor-wrapper">
       <div className="side-panel">
