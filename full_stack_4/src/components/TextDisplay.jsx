@@ -1,33 +1,17 @@
 
 import React from 'react';
 
-function TextDisplay({ text, textStyle }) {
+
+function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote }) {
   return (
     <div className="text-display">
-      <div style={textStyle}>
-        {text || "your text.."}
-      </div>
-
-    </div>
-  );
-}
-
-export default TextDisplay;
-
-
-/*
-function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote, onAddNote }) {
-  return (
-    <div className="text-display">
-      <button className="add-note-button" onClick={onAddNote}>
-        + 
-      </button>
       <div className="grid-container">
         {notes.map((note) => (
           <div
             key={note.id}
             className={`note ${note.id === selectedNoteId ? "selected" : ""}`}
-            onClick={() => onSelectNote(note.id)}
+            onClick={() => onSelectNote(note.id)} 
+            style={note.style} // Apply style only to the selected note
           >
             <button
               className="delete-note-button"
@@ -42,9 +26,10 @@ function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote, onAddN
           </div>
         ))}
       </div>
+      
     </div>
   );
 }
 
 
-export default TextDisplay;*/
+export default TextDisplay;

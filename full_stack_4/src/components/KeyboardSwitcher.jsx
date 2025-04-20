@@ -1,25 +1,25 @@
 import React from "react";
 
-const KeyboardSwitcher = ({ currentLayout, onSwitchLayout }) => {
+const KeyboardSwitcher = ({ currentLayout, onLanguageChange }) => {
   return (
     <div className="keyboard-switcher">
       <button
-        className={`keyboard-key ${currentLayout === "english" ? "active" : ""}`}
-        onClick={() => onSwitchLayout("english")}
+        className={`language-button ${currentLayout === "english" ? "active" : ""}`}
+        onClick={() => onLanguageChange("english")}
       >
-        English
+        A
       </button>
       <button
-        className={`keyboard-key ${currentLayout === "hebrew" ? "active" : ""}`}
-        onClick={() => onSwitchLayout("hebrew")}
+        className={`language-button ${currentLayout === "hebrew" ? "active" : ""}`}
+        onClick={() => onLanguageChange("hebrew")}
       >
-        עברית
+        א
       </button>
       <button
-        className={`keyboard-key ${currentLayout === "emoji" ? "active" : ""}`}
-        onClick={() => onSwitchLayout("emoji")}
+        className={`language-button ${currentLayout === "emoji" ? "active" : ""}`}
+        onClick={() => onLanguageChange("emoji")}
       >
-        😊 Emoji
+        😊 
       </button>
     </div>
   );

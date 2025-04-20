@@ -1,12 +1,35 @@
-
-/*
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TextDisplay from "./components/TextDisplay";
 import EditorArea from "./components/EditorArea";
 
 export default function App() {
-  const [notes, setNotes] = useState([{ id: 1, text: "" }]); // מתחילים עם פתק אחד
+  const [text, setText] = useState("");
+  const [textHistory, setTextHistory] = useState([]);
+  const [notes, setNotes] = useState([
+    {
+      id: 1,
+      text: "",
+      style: {
+        fontFamily: "Arial",
+        fontSize: "16px",
+        color: "black",
+        fontWeight: "normal",
+        fontStyle: "normal",
+        textDecoration: "none",
+      },
+    },
+  ]); // start with one note
   const [selectedNoteId, setSelectedNoteId] = useState(1);
+
+  // כאשר יש שינוי בטקסט, נשמור את המצב הקודם להיסטוריה
+  useEffect(() => {
+    if (
+      text &&
+      (textHistory.length === 0 || textHistory[textHistory.length - 1] !== text)
+    ) {
+      setTextHistory((prev) => [...prev, text]);
+    }
+  }, [text]);
 
   const handleKeyPress = (char) => {
     setNotes((prevNotes) =>
@@ -42,16 +65,78 @@ export default function App() {
 
   const handleAddNote = () => {
     if (notes.length < 6) {
-      const newNote = { id: Date.now(), text: "" }; 
+      const newNote = {
+        id: Date.now(),
+        text: "",
+        style: {
+          fontFamily: "Arial",
+          fontSize: "16px",
+          color: "white",
+          fontWeight: "normal",
+          fontStyle: "normal",
+          textDecoration: "none",
+        },
+      };
       setNotes((prevNotes) => [...prevNotes, newNote]);
-      setSelectedNoteId(newNote.id); 
+      setSelectedNoteId(newNote.id);
     }
   };
 
   const handleDeleteNote = (id) => {
     setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
     if (selectedNoteId === id) {
-      setSelectedNoteId(null); // Deselect the note if it's deleted
+      setSelectedNoteId(null); // אם הפתק שנבחר נמחק, מבטלים את הבחירה
+    }
+  };
+  
+
+  
+  const handleStyleChange = (property, value) => {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.id === selectedNoteId
+          ? {
+              ...note,
+              style: (() => {
+                const newStyle = { ...note.style };
+                switch (property) {
+                  case "bold":
+                    newStyle.fontWeight = newStyle.fontWeight === "bold" ? "normal" : "bold";
+                    break;
+                  case "italic":
+                    newStyle.fontStyle = newStyle.fontStyle === "italic" ? "normal" : "italic";
+                    break;
+                  case "underline":
+                    newStyle.textDecoration = newStyle.textDecoration === "underline" ? "none" : "underline";
+                    break;
+                  default:
+                    newStyle[property] = value;
+                }
+                return newStyle;
+              })(),
+            }
+          : note
+      )
+    );
+  };
+  
+
+  const handleSearchReplace = (searchText, replaceText) => {
+    setText((prev) => prev.replace(new RegExp(searchText, "g"), replaceText));
+  };
+
+  const handleUndo = () => {
+    if (textHistory.length > 0) {
+      const newHistory = [...textHistory];
+      const lastText = newHistory.pop();
+
+      if (newHistory.length > 0) {
+        setText(newHistory[newHistory.length - 1]);
+      } else {
+        setText("");
+      }
+
+      setTextHistory(newHistory);
     }
   };
 
@@ -62,107 +147,17 @@ export default function App() {
         selectedNoteId={selectedNoteId}
         onSelectNote={setSelectedNoteId}
         onDeleteNote={handleDeleteNote}
-        onAddNote={handleAddNote}
       />
-      <EditorArea
-        onKeyPress={handleKeyPress}
-        onSpacePress={handleSpacePress}
-        onDeleteAll={HandleDeleteAll}
-        onDeleteChar={HandleDeleteChar}
-      />
-    </div>
-  );
-}
-
-*/
-import { useState, useEffect } from "react";
-import TextDisplay from "./components/TextDisplay";
-import EditorArea from "./components/EditorArea";
-
-export default function App() {
-  const [text, setText] = useState("");
-  const [textHistory, setTextHistory] = useState([]);
-  const [textStyle, setTextStyle] = useState({
-    fontFamily: 'Arial',
-    fontSize: '16px',
-    color: 'black',
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    textDecoration: 'none'
-  });
-
-  // כאשר יש שינוי בטקסט, נשמור את המצב הקודם להיסטוריה
-  useEffect(() => {
-    // שמירה בהיסטוריה רק אם הטקסט אינו ריק ואינו זהה למצב האחרון בהיסטוריה
-    if (text && (textHistory.length === 0 || textHistory[textHistory.length - 1] !== text)) {
-      setTextHistory(prev => [...prev, text]);
-    }
-  }, [text]);
-
-  const handleKeyPress = (char) => {
-    if (char === "Space") {
-      setText((prev) => prev + " ");
-    } else if (char === "Backspace") {
-      setText((prev) => prev.slice(0, -1));
-    } else {
-      setText((prev) => prev + char);
-    }
-  };
-
-  const handleDeleteAll = () => {
-    setText(""); // delete all text
-  };
-
-  const handleDeleteChar = () => {
-    setText((prev) => prev.slice(0, -1)); // delete last char
-  };
-
-  const handleStyleChange = (property, value) => {
-    setTextStyle(prev => {
-      switch (property) {
-        case 'bold':
-          return { ...prev, fontWeight: prev.fontWeight === 'bold' ? 'normal' : 'bold' };
-        case 'italic':
-          return { ...prev, fontStyle: prev.fontStyle === 'italic' ? 'normal' : 'italic' };
-        case 'underline':
-          return { ...prev, textDecoration: prev.textDecoration === 'underline' ? 'none' : 'underline' };
-        default:
-          return { ...prev, [property]: value };
-      }
-    });
-  };
-
-  const handleSearchReplace = (searchText, replaceText) => {
-    setText(prev => prev.replace(new RegExp(searchText, 'g'), replaceText));
-  };
-
-  const handleUndo = () => {
-    if (textHistory.length > 0) {
-      // חזרה למצב האחרון בהיסטוריה
-      const newHistory = [...textHistory];
-      const lastText = newHistory.pop();
-      
-      if (newHistory.length > 0) {
-        setText(newHistory[newHistory.length - 1]);
-      } else {
-        setText("");
-      }
-      
-      setTextHistory(newHistory);
-    }
-  };
-
-  return (
-    <div className="app-container">
-      <TextDisplay text={text} textStyle={textStyle} />
       <EditorArea
         text={text}
         onKeyPress={handleKeyPress}
-        onDeleteAll={handleDeleteAll}
-        onDeleteChar={handleDeleteChar}
+        onDeleteAll={HandleDeleteAll}
+        onDeleteChar={HandleDeleteChar}
+        onSpacePress={handleSpacePress}
         onStyleChange={handleStyleChange}
         onSearchReplace={handleSearchReplace}
         onUndo={handleUndo}
+        onAddNote={handleAddNote}
       />
     </div>
   );
