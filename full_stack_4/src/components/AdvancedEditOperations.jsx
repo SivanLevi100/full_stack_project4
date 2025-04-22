@@ -7,7 +7,6 @@ function AdvancedEditOperations({ text, onSearchReplace, onUndo }) {
   const [replaceText, setReplaceText] = useState('');
   
   const handleSearch = () => {
-    // אנחנו רק מחפשים את הטקסט, לא משנים את המצב
     if (text.includes(searchText)) {
       alert(`Found "${searchText}" in the text!`);
     } else {

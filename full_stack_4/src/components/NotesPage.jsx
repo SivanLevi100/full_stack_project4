@@ -1,3 +1,5 @@
+//Component for the main page - notes and keyboard
+
 import { useState, useEffect } from "react";
 import TextDisplay from "./TextDisplay";
 import EditorArea from "./EditorArea";

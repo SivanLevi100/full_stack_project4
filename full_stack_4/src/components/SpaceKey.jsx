@@ -1,3 +1,4 @@
+//Spacebar component
 const SpaceKey = ({ onSpacePress }) => {
     return (
       <div className="space-key">

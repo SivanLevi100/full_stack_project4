@@ -1,5 +1,4 @@
 
-
 //Keyboard component
 
 import React, { useState } from 'react';

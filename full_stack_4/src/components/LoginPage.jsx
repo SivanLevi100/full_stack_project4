@@ -1,3 +1,4 @@
+//Component for the login and registration page
 import { useState } from "react";
 
 

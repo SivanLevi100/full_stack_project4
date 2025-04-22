@@ -1,3 +1,4 @@
+//Language switching component
 import React from "react";
 
 const KeyboardSwitcher = ({ currentLayout, onLanguageChange }) => {

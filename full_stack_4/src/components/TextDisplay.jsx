@@ -1,4 +1,4 @@
-
+//Component for displaying notes
 import React from 'react';
 
 

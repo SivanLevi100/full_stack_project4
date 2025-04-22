@@ -1,3 +1,4 @@
+//Text editing area component
 
 import React from 'react';
 import VirtualKeyboard from "./VirtualKeyboard";
