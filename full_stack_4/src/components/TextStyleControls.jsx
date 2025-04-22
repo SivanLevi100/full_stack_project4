@@ -2,13 +2,21 @@
 
 import React from 'react';
 
-function TextStyleControls({ onStyleChange }) {
+function TextStyleControls({ onStyleChange, editMode, setEditMode  }) {
   const fonts = ['Arial', 'Times New Roman', 'Courier New', 'Verdana', 'David'];
   const sizes = ['12px', '14px', '16px', '18px', '24px', '32px'];
   const colors = ['black', 'red', 'blue', 'green', 'purple', 'orange'];
   
   return (
     <div className="text-style-controls">
+       <div className="edit-mode-selector">
+        <label>Edit Mode:</label>
+        <select onChange={(e) => setEditMode(e.target.value)} value={editMode}>
+          <option value="all">Edit All</option>
+          <option value="forward">Edit From Now On</option>
+        </select>
+      </div>
+      
       <div className="style-section">
         <label>Font:</label>
         <select onChange={(e) => onStyleChange('fontFamily', e.target.value)}>

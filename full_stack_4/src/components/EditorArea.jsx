@@ -14,18 +14,25 @@ function EditorArea({
   onKeyPress, 
   onDeleteAll, 
   onDeleteChar, 
+  onDeleteWord,
   onSpacePress,
   onStyleChange,
   onSearchReplace,
   onUndo,
   onAddNote,
+  editMode,
+  setEditMode,
   onSaveNotes
 }) {
 
   return (
     <div className="editor-wrapper">
       <div className="side-panel">
-        <TextStyleControls onStyleChange={onStyleChange} />
+        <TextStyleControls
+           onStyleChange={onStyleChange}
+           editMode={editMode}
+           setEditMode={setEditMode}
+        />
       </div>
   
       <div className="main-panel">
@@ -35,7 +42,7 @@ function EditorArea({
         <NoteHandle 
           onAddNote={onAddNote} 
         />
-        <DeleteKeys onDeleteAll={onDeleteAll} onDeleteChar={onDeleteChar} />
+        <DeleteKeys onDeleteAll={onDeleteAll} onDeleteChar={onDeleteChar} onDeleteWord={onDeleteWord}/>
         <AdvancedEditOperations 
           text={text}
           onSearchReplace={onSearchReplace} 

@@ -9,6 +9,15 @@ import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 function NotesPage({currentUser, setCurrentUser}) {
   const [text, setText] = useState("");
   const [textHistory, setTextHistory] = useState([]);
+  const [editMode, setEditMode] = useState("all"); 
+  const [defaultStyle, setDefaultStyle] = useState({ 
+    fontFamily: "Arial",
+    fontSize: "20px",
+    color: "black",
+    fontWeight: "normal",
+    fontStyle: "normal",
+    textDecoration: "none",
+  });
   const [notes, setNotes] = useState(() => {
     const savedNotes = currentUser.notes;
     return savedNotes
@@ -17,6 +26,7 @@ function NotesPage({currentUser, setCurrentUser}) {
           {
             id: 1,
             text: "",
+            //text: [],
             name:"Untitled",
             style: {
               fontFamily: "Arial",
@@ -99,7 +109,31 @@ function NotesPage({currentUser, setCurrentUser}) {
   
     alert(`Note saved as "${FileName}"`);
   };
+
+
+  /*
+  ערכיה על הכל לא עובד אבל עריכה מכאן והלאה כן
+  const handleKeyPress = (char) => {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.id === selectedNoteId
+          ? {
+              ...note,
+              text: [
+                ...note.text,
+                {
+                  char,
+                  style: editMode === "forward" ? { ...defaultStyle } : { ...note.style },
+                },
+              ],
+            }
+          : note
+      )
+    );
+  };
+  */
   
+
   
 
   const handleKeyPress = (char) => {
@@ -111,6 +145,7 @@ function NotesPage({currentUser, setCurrentUser}) {
       )
     );
   };
+
 
   const handleSpacePress = () => {
     handleKeyPress(" ");
@@ -133,6 +168,27 @@ function NotesPage({currentUser, setCurrentUser}) {
       )
     );
   };
+
+  const handleDeleteWord = () => {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) => {
+        if (note.id === selectedNoteId) {
+          const trimmedText = note.text.trimEnd(); // להימנע מרווחים מיותרים בסוף
+          const lastSpaceIndex = trimmedText.lastIndexOf(" ");
+  
+          return {
+            ...note,
+            text:
+              lastSpaceIndex === -1
+                ? "" // אם אין רווחים בכלל, מוחקים את כל הטקסט
+                : trimmedText.slice(0, lastSpaceIndex + 1), // כולל רווח אחרי המילה שנשארה
+          };
+        }
+        return note;
+      })
+    );
+  };
+
 
   const handleAddNote = () => {
     if (notes.length < 6) {
@@ -166,7 +222,58 @@ function NotesPage({currentUser, setCurrentUser}) {
   };
   
 
+  const handleStyleChange = (property, value) => {
+    if (editMode === "all") {
+      setNotes((prevNotes) =>
+        prevNotes.map((note) =>
+          note.id === selectedNoteId
+            ? {
+                ...note,
+                style: (() => {
+                  const newStyle = { ...note.style };
+                  switch (property) {
+                    case "bold":
+                      newStyle.fontWeight = newStyle.fontWeight === "bold" ? "normal" : "bold";
+                      break;
+                    case "italic":
+                      newStyle.fontStyle = newStyle.fontStyle === "italic" ? "normal" : "italic";
+                      break;
+                    case "underline":
+                      newStyle.textDecoration = newStyle.textDecoration === "underline" ? "none" : "underline";
+                      break;
+                    default:
+                      newStyle[property] = value;
+                  }
+                  return newStyle;
+                })(),
+              }
+            : note
+        )
+      );
+    } else if (editMode === "forward") {
+      setDefaultStyle((prevStyle) => {
+        const newStyle = { ...prevStyle };
+        switch (property) {
+          case "bold":
+            newStyle.fontWeight = newStyle.fontWeight === "bold" ? "normal" : "bold";
+            break;
+          case "italic":
+            newStyle.fontStyle = newStyle.fontStyle === "italic" ? "normal" : "italic";
+            break;
+          case "underline":
+            newStyle.textDecoration = newStyle.textDecoration === "underline" ? "none" : "underline";
+            break;
+          default:
+            newStyle[property] = value;
+        }
+        return newStyle;
+      });
+    }
+  };
   
+  
+
+  /*
   const handleStyleChange = (property, value) => {
     setNotes((prevNotes) =>
       prevNotes.map((note) =>
@@ -194,8 +301,9 @@ function NotesPage({currentUser, setCurrentUser}) {
           : note
       )
     );
-  };
+  };*/
   
+
 
   const handleSearchReplace = (searchText, replaceText) => {
     setText((prev) => prev.replace(new RegExp(searchText, "g"), replaceText));
@@ -234,14 +342,18 @@ function NotesPage({currentUser, setCurrentUser}) {
           onKeyPress={handleKeyPress}
           onDeleteAll={HandleDeleteAll}
           onDeleteChar={HandleDeleteChar}
+          onDeleteWord={handleDeleteWord}
           onSpacePress={handleSpacePress}
           onStyleChange={handleStyleChange}
           onSearchReplace={handleSearchReplace}
           onUndo={handleUndo}
           onAddNote={handleAddNote}
+          editMode={editMode}
+          setEditMode={setEditMode}
         />
       </div>
     </div>
   );
 }
+
 export default NotesPage;

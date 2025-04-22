@@ -531,3 +531,19 @@ body {
   font-size: 0.9rem;
   padding: 0;
 }
+
+
+/*עיצוב כפתורי עריכה מכאן והלאה או על כל הטקסט*/
+.apply-mode-button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  cursor: pointer;
+}
+
+.apply-mode-button.active {
+  background-color: #4285f4;
+  color: white;
+  border-color: #3367d6;
+}
