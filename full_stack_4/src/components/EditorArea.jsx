@@ -1,43 +1,15 @@
-//Text edit area component
-/*
-import VirtualKeyboard from "./VirtualKeyboard";
-import DeleteKeys from "./DeleteKeys";
-import KeyboardSwitcher from "./KeyboardSwitcher";
-import { useState } from "react";
-import SpaceKey from "./SpaceKey";
-
-
-function EditorArea({ onKeyPress, onSpacePress, onDeleteAll, onDeleteChar }) {
-  const [currentLayout, setCurrentLayout] = useState("english");
-
-  const handleSwitchLayout = (layout) => {
-    setCurrentLayout(layout);
-  };
-  return (
-    <div className="editor-area">
-
-      
-      <VirtualKeyboard onKeyPress={onKeyPress} />
-      <DeleteKeys onDeleteAll={onDeleteAll} onDeleteChar={onDeleteChar} />
-
-
-    </div>
-  );
-}
-
-export default EditorArea;
-*/
 
 import React from 'react';
 import VirtualKeyboard from "./VirtualKeyboard";
 import DeleteKeys from "./DeleteKeys";
 import TextStyleControls from "./TextStyleControls";
 import AdvancedEditOperations from "./AdvancedEditOperations";
-import LanguageSwitcher from './LanguageSwitcher';
+import NoteHandle from './NoteHandle';
 
 
 function EditorArea({ 
   text,
+  notes,
   onKeyPress, 
   onDeleteAll, 
   onDeleteChar, 
@@ -45,7 +17,8 @@ function EditorArea({
   onStyleChange,
   onSearchReplace,
   onUndo,
-  onAddNote
+  onAddNote,
+  onSaveNotes
 }) {
 
   return (
@@ -58,15 +31,18 @@ function EditorArea({
         <VirtualKeyboard onKeyPress={onKeyPress} onSpacePress={onSpacePress} />
       </div>
       <div className="side-panel">
+        <NoteHandle 
+          onAddNote={onAddNote} 
+          onSaveNotes={onSaveNotes} 
+          notes={notes}
+        />
         <DeleteKeys onDeleteAll={onDeleteAll} onDeleteChar={onDeleteChar} />
         <AdvancedEditOperations 
           text={text}
           onSearchReplace={onSearchReplace} 
           onUndo={onUndo} 
         />
-        <button className="add-note-button" onClick={onAddNote}>
-        + 
-      </button>
+        
       </div>
     </div>
   );

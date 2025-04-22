@@ -1,0 +1,70 @@
+import { useState } from "react";
+
+
+export default function LoginPage({ setCurrentUser }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isRegister, setIsRegister] = useState(false);
+
+  const handleSubmit = () => {
+    const key = `user_${username}`;
+    const savedUser = localStorage.getItem(key);
+
+    if (isRegister) {
+      if (savedUser) {
+        alert("Username already exists");
+      } else {
+        const newUser = {
+          username,
+          password,
+          notes: [],
+        };
+        localStorage.setItem(key, JSON.stringify(newUser));
+        setCurrentUser(newUser);
+        alert("registered successfully");
+
+      }
+    } else {
+      if (savedUser) {
+        const parsed = JSON.parse(savedUser);
+        if (parsed.password === password) {
+          setCurrentUser(parsed);
+            alert("Login successful");
+        } else {
+          alert("Incorrect password.");
+        }
+      } else {
+        alert("User not found. Please register.");
+      }
+    }
+  };
+
+  return (
+    <div className="login-container">
+      <div className="login-box">
+        <h2>{isRegister ? "Register" : "Login"}</h2>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button className="confirm-btn" onClick={handleSubmit}>
+          {isRegister ? "Register" : "Login"}
+        </button>
+        <p>
+          {isRegister ? "Already have an account?" : "Don't have an account?"}{" "}
+          <button className="toggle-btn" onClick={() => setIsRegister(!isRegister)}>
+            {isRegister ? "Login" : "Register"}
+          </button>
+        </p>
+      </div>
+    </div>
+  );
+}
