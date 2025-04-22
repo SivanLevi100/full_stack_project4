@@ -34,8 +34,6 @@ function EditorArea({
       <div className="side-panel">
         <NoteHandle 
           onAddNote={onAddNote} 
-          onSaveNotes={onSaveNotes} 
-          notes={notes}
         />
         <DeleteKeys onDeleteAll={onDeleteAll} onDeleteChar={onDeleteChar} />
         <AdvancedEditOperations 

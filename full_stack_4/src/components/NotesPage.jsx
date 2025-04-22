@@ -17,6 +17,7 @@ function NotesPage({currentUser, setCurrentUser}) {
           {
             id: 1,
             text: "",
+            name:"Untitled",
             style: {
               fontFamily: "Arial",
               fontSize: "20px",
@@ -31,14 +32,6 @@ function NotesPage({currentUser, setCurrentUser}) {
   const [selectedNoteId, setSelectedNoteId] = useState(
     notes.length > 0 ? notes[0].id : null
   );
-
-  const saveNotesToLocalStorage = (updatedNotes) => {
-    const updatedUser = { ...currentUser, notes: updatedNotes };
-    setCurrentUser(updatedUser);
-    localStorage.setItem(`user_${currentUser.username}`, JSON.stringify(updatedUser));
-  };
-
-
   // כאשר יש שינוי בטקסט, נשמור את המצב הקודם להיסטוריה
   useEffect(() => {
     if (
@@ -48,6 +41,66 @@ function NotesPage({currentUser, setCurrentUser}) {
       setTextHistory((prev) => [...prev, text]);
     }
   }, [text]);
+
+  
+  
+  const saveNoteToLocalStorage = (noteID) => {
+    const note = notes.find((note) => note.id === noteID);
+    if (!note) {
+      alert("Note not found.");
+      return;
+    }
+  
+    // check if the note already exists in local storage
+    const existingFileName = currentUser.files?.find((fileName) => {
+      const storedNote = localStorage.getItem(`note_${currentUser.username}_${fileName}`);
+      if (!storedNote) return false;
+      try {
+        const parsedNote = JSON.parse(storedNote);
+        return parsedNote.id === noteID;
+      } catch {
+        return false;
+      }
+    });
+  
+    if (existingFileName) {
+      //if the note already exists, update it
+      const noteKey = `note_${currentUser.username}_${existingFileName}`;
+      localStorage.setItem(noteKey, JSON.stringify(note));
+      alert(`Note updated in file "${existingFileName}"`);
+      return;
+    }
+  
+    // else, get a new file name from the user
+    const FileName = prompt("Please enter a name for this file:");
+    if (!FileName) {
+      alert("File name cannot be empty.");
+      return;
+    }
+  
+    const noteKey = `note_${currentUser.username}_${FileName}`;
+  
+    // check if the file name already exists in local storage
+    if (localStorage.getItem(noteKey)) {
+      alert("A file with this name already exists.");
+      return;
+    }
+  
+    // save the note as a file in the local storage
+    localStorage.setItem(noteKey, JSON.stringify(note));
+  
+    const updatedUser = {
+      ...currentUser,
+      files: [...(currentUser.files || []), FileName],
+    };
+  
+    localStorage.setItem(`user_${currentUser.username}`, JSON.stringify(updatedUser));
+    setCurrentUser(updatedUser);
+  
+    alert(`Note saved as "${FileName}"`);
+  };
+  
+  
 
   const handleKeyPress = (char) => {
     setNotes((prevNotes) =>
@@ -86,6 +139,7 @@ function NotesPage({currentUser, setCurrentUser}) {
       const newNote = {
         id: Date.now(),
         text: "",
+        name: "Untitled",
         style: {
           fontFamily: "Arial",
           fontSize: "20px",
@@ -102,6 +156,8 @@ function NotesPage({currentUser, setCurrentUser}) {
   };
 
   const handleDeleteNote = (id) => {
+    prompt("Do you want to save this note before deleting it? (yes/no)", "yes") === "yes" &&
+      saveNoteToLocalStorage(id);
     const updatedNotes = notes.filter((note) => note.id !== id);
     setNotes(updatedNotes);
     if (selectedNoteId === id) {
@@ -171,10 +227,10 @@ function NotesPage({currentUser, setCurrentUser}) {
           selectedNoteId={selectedNoteId}
           onSelectNote={setSelectedNoteId}
           onDeleteNote={handleDeleteNote}
+          onSaveNotes={saveNoteToLocalStorage}
         />
         <EditorArea
           text={text}
-          notes={notes}
           onKeyPress={handleKeyPress}
           onDeleteAll={HandleDeleteAll}
           onDeleteChar={HandleDeleteChar}
@@ -183,7 +239,6 @@ function NotesPage({currentUser, setCurrentUser}) {
           onSearchReplace={handleSearchReplace}
           onUndo={handleUndo}
           onAddNote={handleAddNote}
-          onSaveNotes={saveNotesToLocalStorage}
         />
       </div>
     </div>

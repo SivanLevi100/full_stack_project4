@@ -2,7 +2,7 @@
 import React from 'react';
 
 
-function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote }) {
+function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote,onSaveNotes }) {
   return (
     <div className="text-display">
       <div className="grid-container">
@@ -24,6 +24,15 @@ function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote }) {
               }}
             >
               X
+            </button>
+            <button
+              className="save-note-button"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent the click event from bubbling up to the note div
+                onSaveNotes(note.id);
+              }}
+            >
+              V
             </button>
             {note.id === selectedNoteId && note.text === ""
               ? "" : note.text || "Click to edit..."}          </div>
