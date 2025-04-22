@@ -4,7 +4,6 @@
 
 import React, { useState } from 'react';
 import KeyboardKey from "./KeyboardKey";
-import LanguageSwitcher from "./LanguageSwitcher";
 import KeyboardSwitcher from './KeyboardSwitcher';
 import SpaceKey from "./SpaceKey";
 
@@ -26,17 +25,17 @@ const keyboardLayouts = {
     ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')'],
   ],
   emoji: [
-    ['😀', '😂', '😊', '😍', '😎', '🤔', '😴', '😳', '😭', '😡'],
-    ['👍', '👎', '👌', '✋', '👏', '👋', '👀', '👉', '👈', '💪'],
-    ['❤️', '💔', '💖', '💙', '💯', '💤', '💨', '💦', '💫', '⭐'],
-    ['🔥', '⚡', '☀️', '🌙', '☁️', '🌈', '🍀', '🌹', '🌸', '🍂'],
-    ['🐶', '🐱', '🐭', '🐼', '🐵', '🦁', '🐯', '🦊', '🐻', '🐨'],
+    ['😀', '😂', '😊', '😍', '😎', '🤔', '😴', '😳', '😭'],
+    ['👍', '👎', '👌', '👏', '👋', '👀', '👉', '👈', '💪'],
+    ['❤️', '💔', '💖', '💙', '💯', '💤', '💦', '💫', '⭐'],
+    ['🔥', '⚡', '☀️', '🌙', '🌈', '🍀', '🌹', '🌸', '🍂'],
+    ['🐶', '🐱', '🐭', '🐼', '🐵', '🦁', '🦊', '🐻', '🐨'],
   ]
 
 };
 
 function VirtualKeyboard({ onKeyPress, onSpacePress }) {
-  const [currentLanguage, setCurrentLanguage] = useState('english');
+  const [currentLanguage, setCurrentLanguage] = useState('hebrew');
   
   const handleLanguageChange = (language) => {
     setCurrentLanguage(language);

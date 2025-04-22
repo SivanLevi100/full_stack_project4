@@ -11,7 +11,7 @@ export default function App() {
       text: "",
       style: {
         fontFamily: "Arial",
-        fontSize: "16px",
+        fontSize: "20px",
         color: "black",
         fontWeight: "normal",
         fontStyle: "normal",
@@ -70,8 +70,8 @@ export default function App() {
         text: "",
         style: {
           fontFamily: "Arial",
-          fontSize: "16px",
-          color: "white",
+          fontSize: "20px",
+          color:"black",
           fontWeight: "normal",
           fontStyle: "normal",
           textDecoration: "none",
@@ -85,7 +85,7 @@ export default function App() {
   const handleDeleteNote = (id) => {
     setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
     if (selectedNoteId === id) {
-      setSelectedNoteId(null); // אם הפתק שנבחר נמחק, מבטלים את הבחירה
+      setSelectedNoteId(null); // Deselect the note if it's deleted
     }
   };
   

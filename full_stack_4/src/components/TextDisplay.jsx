@@ -10,7 +10,10 @@ function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote }) {
           <div
             key={note.id}
             className={`note ${note.id === selectedNoteId ? "selected" : ""}`}
-            onClick={() => onSelectNote(note.id)} 
+            onClick={() => {
+              onSelectNote(note.id);
+              }
+            }
             style={note.style} // Apply style only to the selected note
           >
             <button
@@ -22,8 +25,8 @@ function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote }) {
             >
               X
             </button>
-            {note.text || "Click to edit..."}
-          </div>
+            {note.id === selectedNoteId && note.text === ""
+              ? "" : note.text || "Click to edit..."}          </div>
         ))}
       </div>
       
