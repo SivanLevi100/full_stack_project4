@@ -1,6 +1,8 @@
 //Component for displaying notes
 
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 
 
 function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote,onSaveNotes }) {
@@ -33,7 +35,7 @@ function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote,onSaveN
                 onSaveNotes(note.id);
               }}
             >
-              V
+              <FontAwesomeIcon icon={faFloppyDisk} />
             </button>
             {note.id === selectedNoteId && note.text === ""
               ? "" : note.text || "Click to edit..."}          </div>

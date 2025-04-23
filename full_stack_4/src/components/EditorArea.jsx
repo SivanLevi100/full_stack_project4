@@ -6,10 +6,13 @@ import DeleteKeys from "./DeleteKeys";
 import TextStyleControls from "./TextStyleControls";
 import AdvancedEditOperations from "./AdvancedEditOperations";
 import NoteHandle from './NoteHandle';
+import OpenFiles from './OpenFiles';
 
 
 function EditorArea({ 
   text,
+  currentUser,
+  setNotes,
   notes,
   onKeyPress, 
   onDeleteAll, 
@@ -22,7 +25,6 @@ function EditorArea({
   onAddNote,
   editMode,
   setEditMode,
-  onSaveNotes
 }) {
 
   return (
@@ -41,6 +43,11 @@ function EditorArea({
       <div className="side-panel">
         <NoteHandle 
           onAddNote={onAddNote} 
+        />
+        <OpenFiles
+          currentUser={currentUser} 
+          notes={notes}
+          setNotes={setNotes} 
         />
         <DeleteKeys onDeleteAll={onDeleteAll} onDeleteChar={onDeleteChar} onDeleteWord={onDeleteWord}/>
         <AdvancedEditOperations 

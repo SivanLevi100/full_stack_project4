@@ -18,7 +18,7 @@ export default function LoginPage({ setCurrentUser }) {
         const newUser = {
           username,
           password,
-          notes: [],
+          files: [],
         };
         localStorage.setItem(key, JSON.stringify(newUser));
         setCurrentUser(newUser);
@@ -30,7 +30,6 @@ export default function LoginPage({ setCurrentUser }) {
         const parsed = JSON.parse(savedUser);
         if (parsed.password === password) {
           setCurrentUser(parsed);
-            alert("Login successful");
         } else {
           alert("Incorrect password.");
         }

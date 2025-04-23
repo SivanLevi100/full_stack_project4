@@ -18,27 +18,23 @@ function NotesPage({currentUser, setCurrentUser}) {
     fontStyle: "normal",
     textDecoration: "none",
   });
-  const [notes, setNotes] = useState(() => {
-    const savedNotes = currentUser.notes;
-    return savedNotes
-      ? savedNotes
-      : [
-          {
-            id: 1,
-            text: "",
-            //text: [],
-            name:"Untitled",
-            style: {
-              fontFamily: "Arial",
-              fontSize: "20px",
-              color: "black",
-              fontWeight: "normal",
-              fontStyle: "normal",
-              textDecoration: "none",
-            },
-          },
-        ];
-  });
+
+  const [notes, setNotes] = useState(
+    [{
+        id: 1,
+        text: "",
+        style: {
+          fontFamily: "Arial",
+          fontSize: "20px",
+          color: "black",
+          fontWeight: "normal",
+          fontStyle: "normal",
+          textDecoration: "none",
+        },
+      },
+    ]
+  );
+
   const [selectedNoteId, setSelectedNoteId] = useState(
     notes.length > 0 ? notes[0].id : null
   );
@@ -54,7 +50,7 @@ function NotesPage({currentUser, setCurrentUser}) {
 
   
   
-  const saveNoteToLocalStorage = (noteID) => {
+  const saveNoteInFile = (noteID) => {
     const note = notes.find((note) => note.id === noteID);
     if (!note) {
       alert("Note not found.");
@@ -63,11 +59,11 @@ function NotesPage({currentUser, setCurrentUser}) {
   
     // check if the note already exists in local storage
     const existingFileName = currentUser.files?.find((fileName) => {
-      const storedNote = localStorage.getItem(`note_${currentUser.username}_${fileName}`);
-      if (!storedNote) return false;
+      const storedFile = localStorage.getItem(`note_${currentUser.username}_${fileName}`);
+      if (!storedFile) return false;
       try {
-        const parsedNote = JSON.parse(storedNote);
-        return parsedNote.id === noteID;
+        const parsedFile = JSON.parse(storedFile);
+        return parsedFile.id === noteID;
       } catch {
         return false;
       }
@@ -195,7 +191,6 @@ function NotesPage({currentUser, setCurrentUser}) {
       const newNote = {
         id: Date.now(),
         text: "",
-        name: "Untitled",
         style: {
           fontFamily: "Arial",
           fontSize: "20px",
@@ -212,12 +207,38 @@ function NotesPage({currentUser, setCurrentUser}) {
   };
 
   const handleDeleteNote = (id) => {
-    prompt("Do you want to save this note before deleting it? (yes/no)", "yes") === "yes" &&
-      saveNoteToLocalStorage(id);
+    const noteToDelete = notes.find((note) => note.id === id);
+    if (!noteToDelete) return;
+  
+    // try to find the saved text in local storage
+    let savedText = null;
+    if (currentUser?.files) {
+      for (const fileName of currentUser.files) {
+        const data = localStorage.getItem(`note_${currentUser.username}_${fileName}`);
+        if (!data) continue;
+          const parsed = JSON.parse(data);
+          if (parsed.id === id) {
+            savedText = parsed.text; //take the text from the file
+            break;
+          }
+      }
+    }
+  
+    const isChanged = savedText === null || savedText !== noteToDelete.text;
+  
+    if (isChanged){
+      const userResponse=prompt("Do you want to save this note before deleting it? (yes/no)", "yes") 
+      if (userResponse ===null) {
+        return; // User clicked "Cancel"
+      } else if (userResponse === "yes") {
+        saveNoteInFile(id);
+      }
+    }
+  
     const updatedNotes = notes.filter((note) => note.id !== id);
     setNotes(updatedNotes);
     if (selectedNoteId === id) {
-      setSelectedNoteId(null); // Deselect the note if it's deleted
+      setSelectedNoteId(null);
     }
   };
   
@@ -335,10 +356,13 @@ function NotesPage({currentUser, setCurrentUser}) {
           selectedNoteId={selectedNoteId}
           onSelectNote={setSelectedNoteId}
           onDeleteNote={handleDeleteNote}
-          onSaveNotes={saveNoteToLocalStorage}
+          onSaveNotes={saveNoteInFile}
         />
         <EditorArea
           text={text}
+          notes={notes}
+          setNotes={setNotes}
+          currentUser={currentUser}
           onKeyPress={handleKeyPress}
           onDeleteAll={HandleDeleteAll}
           onDeleteChar={HandleDeleteChar}
