@@ -13,7 +13,7 @@ export default function LoginPage({ setCurrentUser }) {
 
     if (isRegister) {
       if (savedUser) {
-        alert("Username already exists");
+        showMessage("alert", "Username already exists",() => {});
       } else {
         const newUser = {
           username,
@@ -22,7 +22,7 @@ export default function LoginPage({ setCurrentUser }) {
         };
         localStorage.setItem(key, JSON.stringify(newUser));
         setCurrentUser(newUser);
-        alert("registered successfully");
+        showMessage("alert", "registered successfully",() => {});
 
       }
     } else {
@@ -31,10 +31,10 @@ export default function LoginPage({ setCurrentUser }) {
         if (parsed.password === password) {
           setCurrentUser(parsed);
         } else {
-          alert("Incorrect password.");
+          showMessage("alert","Incorrect password.",() => {});
         }
       } else {
-        alert("User not found. Please register.");
+        showMessage("alert", "User not found. Please register.",() => {});
       }
     }
   };

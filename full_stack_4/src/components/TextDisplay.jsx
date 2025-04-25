@@ -6,7 +6,7 @@ import NoteHandle from './NoteHandle';
 
 
 
-function TextDisplay({ notes, selectedNoteId, onSelectNote,onDeleteNote,onSaveNotes }) {
+function TextDisplay({ notes, selectedNoteId, onSelectNote,onDeleteNote,onSaveNotes,onUndo,showMessage }) {
   return (
     <div className="text-display">
       <div className="grid-container">
@@ -20,7 +20,7 @@ function TextDisplay({ notes, selectedNoteId, onSelectNote,onDeleteNote,onSaveNo
             }
             style={note.style} // Apply style only to the selected note
           >
-            <NoteHandle onDeleteNote={onDeleteNote} onSaveNotes={onSaveNotes} note={note} />
+            <NoteHandle onDeleteNote={onDeleteNote} onSaveNotes={onSaveNotes} note={note} onUndo={onUndo} />
             {note.id === selectedNoteId && note.text === ""
               ? "" : note.text || "Click to edit..."}          
               </div>

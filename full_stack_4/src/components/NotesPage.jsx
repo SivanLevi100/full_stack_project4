@@ -6,9 +6,8 @@ import EditorArea from "./EditorArea";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
-function NotesPage({currentUser, setCurrentUser}) {
+function NotesPage({currentUser, setCurrentUser,showMessage}) {
   const [text, setText] = useState("");
-  const [textHistory, setTextHistory] = useState([]);
   const [editMode, setEditMode] = useState("all"); 
   const [defaultStyle, setDefaultStyle] = useState({ 
     fontFamily: "Arial",
@@ -23,6 +22,7 @@ function NotesPage({currentUser, setCurrentUser}) {
     [{
         id: 1,
         text: "",
+        history: [], // Initialize history for the new note
         style: {
           fontFamily: "Arial",
           fontSize: "20px",
@@ -34,30 +34,21 @@ function NotesPage({currentUser, setCurrentUser}) {
       },
     ]
   );
-
+  
+  
   const [selectedNoteId, setSelectedNoteId] = useState(
     notes.length > 0 ? notes[0].id : null
   );
-  // כאשר יש שינוי בטקסט, נשמור את המצב הקודם להיסטוריה
-  useEffect(() => {
-    if (
-      text &&
-      (textHistory.length === 0 || textHistory[textHistory.length - 1] !== text)
-    ) {
-      setTextHistory((prev) => [...prev, text]);
-    }
-  }, [text]);
-
   
   
   const saveNoteInFile = (noteID) => {
     const note = notes.find((note) => note.id === noteID);
     if (!note) {
-      alert("Note not found.");
+      showMessage("alert", "Note not found.", () => {});
       return;
     }
   
-    // check if the note already exists in local storage
+    // Check if the note already exists in local storage
     const existingFileName = currentUser.files?.find((fileName) => {
       const storedFile = localStorage.getItem(`note_${currentUser.username}_${fileName}`);
       if (!storedFile) return false;
@@ -70,40 +61,41 @@ function NotesPage({currentUser, setCurrentUser}) {
     });
   
     if (existingFileName) {
-      //if the note already exists, update it
+      // If the note already exists, update it
       const noteKey = `note_${currentUser.username}_${existingFileName}`;
       localStorage.setItem(noteKey, JSON.stringify(note));
-      alert(`Note updated in file "${existingFileName}"`);
+      showMessage("alert", `Note updated in file "${existingFileName}"`, () => {});
       return;
     }
   
-    // else, get a new file name from the user
-    const FileName = prompt("Please enter a name for this file:");
-    if (!FileName) {
-      alert("File name cannot be empty.");
-      return;
-    }
+    // Else, get a new file name from the user
+    showMessage("prompt", "Please enter a name for this file:", (fileName) => {
+      if (!fileName) {
+        showMessage("alert", "File name cannot be empty.", () => {});
+        return;
+      }
   
-    const noteKey = `note_${currentUser.username}_${FileName}`;
+      const trimmedFileName = fileName.trim(); // Remove leading and trailing spaces
+      const noteKey = `note_${currentUser.username}_${trimmedFileName}`;
   
-    // check if the file name already exists in local storage
-    if (localStorage.getItem(noteKey)) {
-      alert("A file with this name already exists.");
-      return;
-    }
+      // Check if the file name already exists in local storage
+      if (localStorage.getItem(noteKey)) {
+        showMessage("alert", "A file with this name already exists.", () => {});
+        return;
+      }
   
-    // save the note as a file in the local storage
-    localStorage.setItem(noteKey, JSON.stringify(note));
+      // Save the note as a file in the local storage
+      localStorage.setItem(noteKey, JSON.stringify(note));
   
-    const updatedUser = {
-      ...currentUser,
-      files: [...(currentUser.files || []), FileName],
-    };
+      const updatedUser = {
+        ...currentUser,
+        files: [...(currentUser.files || []), trimmedFileName],
+      };
   
-    localStorage.setItem(`user_${currentUser.username}`, JSON.stringify(updatedUser));
-    setCurrentUser(updatedUser);
-  
-    alert(`Note saved as "${FileName}"`);
+      localStorage.setItem(`user_${currentUser.username}`, JSON.stringify(updatedUser));
+      setCurrentUser(updatedUser);
+      showMessage("alert", `Note saved as "${trimmedFileName}"`, () => {});
+    });
   };
 
 
@@ -136,7 +128,9 @@ function NotesPage({currentUser, setCurrentUser}) {
     setNotes((prevNotes) =>
       prevNotes.map((note) =>
         note.id === selectedNoteId
-          ? { ...note, text: note.text + char }
+          ? { ...note, text: note.text + char,
+                history: [...note.history.slice(-3), { ...note }], // Keep the last 3 states in history
+          }
           : note
       )
     );
@@ -150,7 +144,8 @@ function NotesPage({currentUser, setCurrentUser}) {
   const HandleDeleteAll = () => {
     setNotes((prevNotes) =>
       prevNotes.map((note) =>
-        note.id === selectedNoteId ? { ...note, text: "" } : note
+        note.id === selectedNoteId ? { ...note, text: "", history: [...note.history.slice(-3), { ...note }], // Keep the last 3 states in history
+  } : note
       )
     );
   };
@@ -159,7 +154,10 @@ function NotesPage({currentUser, setCurrentUser}) {
     setNotes((prevNotes) =>
       prevNotes.map((note) =>
         note.id === selectedNoteId
-          ? { ...note, text: note.text.slice(0, -1) }
+          ? { ...note, text: note.text.slice(0, -1),
+            history: [...note.history.slice(-3), { ...note }], // Keep the last 3 states in history
+
+           }
           : note
       )
     );
@@ -169,15 +167,16 @@ function NotesPage({currentUser, setCurrentUser}) {
     setNotes((prevNotes) =>
       prevNotes.map((note) => {
         if (note.id === selectedNoteId) {
-          const trimmedText = note.text.trimEnd(); // להימנע מרווחים מיותרים בסוף
+          const trimmedText = note.text.trimEnd(); // prevents trimming the last space
           const lastSpaceIndex = trimmedText.lastIndexOf(" ");
   
           return {
             ...note,
+            history: [...note.history.slice(-3), { ...note }], // Keep the last 3 states in history
             text:
               lastSpaceIndex === -1
-                ? "" // אם אין רווחים בכלל, מוחקים את כל הטקסט
-                : trimmedText.slice(0, lastSpaceIndex + 1), // כולל רווח אחרי המילה שנשארה
+                ? "" //if there is no space, delete the whole text
+                : trimmedText.slice(0, lastSpaceIndex + 1), // keep the space after the word
           };
         }
         return note;
@@ -199,6 +198,7 @@ function NotesPage({currentUser, setCurrentUser}) {
           fontStyle: "normal",
           textDecoration: "none",
         },
+        history: [], // Initialize history for the new note
       };
       const updatedNotes = [...notes, newNote];
       setNotes(updatedNotes);
@@ -226,21 +226,23 @@ function NotesPage({currentUser, setCurrentUser}) {
   
     const isChanged = savedText === null || savedText !== noteToDelete.text;
   
-    if (isChanged){
-      const userResponse=prompt("Do you want to save this note before deleting it? (yes/no)", "yes") 
-      if (userResponse ===null) {
-        return; // User clicked "Cancel"
-      } else if (userResponse === "yes") {
-        saveNoteInFile(id);
-      }
+    if (isChanged) {
+      showMessage(
+        "prompt", //type of message
+        "Do you want to save this note before deleting it? (yes/no)", //message
+        (userResponse) => {
+          if (userResponse === "yes") {
+            saveNoteInFile(id); 
+          }
+          const updatedNotes = notes.filter((note) => note.id !== id);
+          setNotes(updatedNotes);
+          if (selectedNoteId === id) {
+            setSelectedNoteId(null);
+          }
+        }
+      );
     }
-  
-    const updatedNotes = notes.filter((note) => note.id !== id);
-    setNotes(updatedNotes);
-    if (selectedNoteId === id) {
-      setSelectedNoteId(null);
-    }
-  };
+  }
   
 
   const handleStyleChange = (property, value) => {
@@ -250,6 +252,7 @@ function NotesPage({currentUser, setCurrentUser}) {
           note.id === selectedNoteId
             ? {
                 ...note,
+                history: [...note.history.slice(-3), { ...note }], // Keep the last 3 states in history
                 style: (() => {
                   const newStyle = { ...note.style };
                   switch (property) {
@@ -330,19 +333,24 @@ function NotesPage({currentUser, setCurrentUser}) {
     setText((prev) => prev.replace(new RegExp(searchText, "g"), replaceText));
   };
 
-  const handleUndo = () => {
-    if (textHistory.length > 0) {
-      const newHistory = [...textHistory];
-      const lastText = newHistory.pop();
-
-      if (newHistory.length > 0) {
-        setText(newHistory[newHistory.length - 1]);
-      } else {
-        setText("");
-      }
-
-      setTextHistory(newHistory);
-    }
+  const handleUndo = (selectedNote) => {
+      setNotes((prevNotes) =>
+        prevNotes.map((note) => {
+          if (note.id === selectedNote.id) {
+            if (note.history.length === 0) {
+              return note;
+            }
+    
+            
+            const lastState = note.history[note.history.length - 1];
+            return {
+              ...lastState,
+              history: note.history.slice(0, -1),             // Remove the last state from history
+            };
+          }
+          return note;
+        })
+      );
   };
 
   return (
@@ -357,6 +365,8 @@ function NotesPage({currentUser, setCurrentUser}) {
           onSelectNote={setSelectedNoteId}
           onDeleteNote={handleDeleteNote}
           onSaveNotes={saveNoteInFile}
+          onUndo={handleUndo}
+          showMessage={showMessage}
         />
         <EditorArea
           text={text}
@@ -374,6 +384,8 @@ function NotesPage({currentUser, setCurrentUser}) {
           onAddNote={handleAddNote}
           editMode={editMode}
           setEditMode={setEditMode}
+          showMessage={showMessage}
+
         />
       </div>
     </div>

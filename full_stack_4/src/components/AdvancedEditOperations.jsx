@@ -8,18 +8,18 @@ function AdvancedEditOperations({ text, onSearchReplace, onUndo }) {
   
   const handleSearch = () => {
     if (text.includes(searchText)) {
-      alert(`Found "${searchText}" in the text!`);
+      showMessage("alert", `Found "${searchText}" in the text!`,() => {});
     } else {
-      alert(`"${searchText}" not found.`);
+      showMessage("alert", `"${searchText}" not found.`,() => {});
     }
   };
   
   const handleReplace = () => {
     if (text.includes(searchText)) {
       onSearchReplace(searchText, replaceText);
-      alert(`Replaced "${searchText}" with "${replaceText}"`);
+      showMessage("alert", `Replaced "${searchText}" with "${replaceText}"`,() => {});
     } else {
-      alert(`"${searchText}" not found.`);
+      showMessage("alert", `"${searchText}" not found.`,() => {});
     }
   };
   

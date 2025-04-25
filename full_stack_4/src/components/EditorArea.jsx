@@ -24,6 +24,7 @@ function EditorArea({
   onAddNote,
   editMode,
   setEditMode,
+  showMessage,
 }) {
   
 
@@ -47,6 +48,7 @@ function EditorArea({
             currentUser={currentUser} 
             notes={notes}
             setNotes={setNotes} 
+            showMessage={showMessage}
           />
         </div>
         <DeleteKeys onDeleteAll={onDeleteAll} onDeleteChar={onDeleteChar} onDeleteWord={onDeleteWord}/>

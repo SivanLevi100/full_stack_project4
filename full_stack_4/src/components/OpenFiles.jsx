@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const OpenFiles = ({ currentUser, setNotes, notes }) => {
+const OpenFiles = ({ currentUser, setNotes, notes,showMessage }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedFile, setSelectedFile] = useState("");
 
@@ -8,7 +8,7 @@ const OpenFiles = ({ currentUser, setNotes, notes }) => {
     const noteKey = `note_${currentUser.username}_${fileName.trim()}`;
     const noteJSON = localStorage.getItem(noteKey);
     if (!noteJSON) {
-      alert("Note content not found.");
+      showMessage("alert","Note content not found.",() => {});
       return;
     }
 
@@ -17,7 +17,7 @@ const OpenFiles = ({ currentUser, setNotes, notes }) => {
       const note = JSON.parse(noteJSON);
       const alreadyExists = notes.some((n) => n.id === note.id);
       if (alreadyExists) {
-        alert("Note is already open.");
+        showMessage("alert","File is already open.",() => {});
         return;
       }
       console.log("note", note);
@@ -27,7 +27,7 @@ const OpenFiles = ({ currentUser, setNotes, notes }) => {
       setSelectedFile("");
       setShowDropdown(false);
     } catch {
-      alert("Failed to parse note data.");
+      showMessage("alert","Failed to parse note data.",() => {});
     }
   };
 
