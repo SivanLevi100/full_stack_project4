@@ -3,7 +3,7 @@ import React from "react";
 
 const KeyboardSwitcher = ({ currentLayout, onLanguageChange }) => {
   return (
-    <div className="keyboard-switcher">
+    <div className="language-switcher">
       <button
         className={`language-button ${currentLayout === "english" ? "active" : ""}`}
         onClick={() => onLanguageChange("english")}

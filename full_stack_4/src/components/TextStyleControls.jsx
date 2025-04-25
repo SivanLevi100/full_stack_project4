@@ -16,25 +16,25 @@ function TextStyleControls({ onStyleChange, editMode, setEditMode  }) {
           <option value="forward">Edit From Now On</option>
         </select>
       </div>
-      
-      <div className="style-section">
-        <label>Font:</label>
-        <select onChange={(e) => onStyleChange('fontFamily', e.target.value)}>
-          {fonts.map(font => (
-            <option key={font} value={font}>{font}</option>
-          ))}
-        </select>
+      <div className='font-size-selector'>
+        <div className="style-section">
+          <label>Font:</label>
+          <select onChange={(e) => onStyleChange('fontFamily', e.target.value)}>
+            {fonts.map(font => (
+              <option key={font} value={font}>{font}</option>
+            ))}
+          </select>
+        </div>
+        
+        <div className="style-section">
+          <label>Size:</label>
+          <select onChange={(e) => onStyleChange('fontSize', e.target.value)}>
+            {sizes.map(size => (
+              <option key={size} value={size}>{size}</option>
+            ))}
+          </select>
+        </div>
       </div>
-      
-      <div className="style-section">
-        <label>Size:</label>
-        <select onChange={(e) => onStyleChange('fontSize', e.target.value)}>
-          {sizes.map(size => (
-            <option key={size} value={size}>{size}</option>
-          ))}
-        </select>
-      </div>
-      
       <div className="style-section">
         <label>Color:</label>
         <div className="color-options">

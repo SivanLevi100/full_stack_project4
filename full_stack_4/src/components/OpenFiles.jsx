@@ -32,12 +32,8 @@ const OpenFiles = ({ currentUser, setNotes, notes }) => {
   };
 
   return (
-    <div style={{ margin: "10px 0" }}>
-      <button onClick={() => setShowDropdown(!showDropdown)}>
-        📂 Open File
-      </button>
-
-      {showDropdown && (
+    <div className="open-files">
+      { (
         <>
           {currentUser.files && currentUser.files.length > 0 ? (
             <select
@@ -47,9 +43,9 @@ const OpenFiles = ({ currentUser, setNotes, notes }) => {
                 setSelectedFile(file);
                 handleOpenFile(file);
               }}
-              style={{ marginLeft: "10px" }}
+              className="file-select"
             >
-              <option value="">-- Select a file --</option>
+              <option value="">📂 Open File</option>
               {currentUser.files.map((fileName) => (
                 <option key={fileName} value={fileName}>
                   {fileName}

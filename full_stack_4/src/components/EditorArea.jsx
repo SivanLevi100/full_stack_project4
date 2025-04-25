@@ -5,7 +5,6 @@ import VirtualKeyboard from "./VirtualKeyboard";
 import DeleteKeys from "./DeleteKeys";
 import TextStyleControls from "./TextStyleControls";
 import AdvancedEditOperations from "./AdvancedEditOperations";
-import NoteHandle from './NoteHandle';
 import OpenFiles from './OpenFiles';
 
 
@@ -26,9 +25,10 @@ function EditorArea({
   editMode,
   setEditMode,
 }) {
+  
 
   return (
-    <div className="editor-wrapper">
+    <div className="editor-area">
       <div className="side-panel">
         <TextStyleControls
            onStyleChange={onStyleChange}
@@ -41,14 +41,14 @@ function EditorArea({
         <VirtualKeyboard onKeyPress={onKeyPress} onSpacePress={onSpacePress} />
       </div>
       <div className="side-panel">
-        <NoteHandle 
-          onAddNote={onAddNote} 
-        />
-        <OpenFiles
-          currentUser={currentUser} 
-          notes={notes}
-          setNotes={setNotes} 
-        />
+        <div className='notes-header'>
+          <button className='add-note-button' onClick={onAddNote} title="add new note">+ Add Note</button>
+          <OpenFiles
+            currentUser={currentUser} 
+            notes={notes}
+            setNotes={setNotes} 
+          />
+        </div>
         <DeleteKeys onDeleteAll={onDeleteAll} onDeleteChar={onDeleteChar} onDeleteWord={onDeleteWord}/>
         <AdvancedEditOperations 
           text={text}

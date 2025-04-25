@@ -1,11 +1,12 @@
 //Component for displaying notes
 
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+
+import NoteHandle from './NoteHandle';
 
 
-function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote,onSaveNotes }) {
+
+function TextDisplay({ notes, selectedNoteId, onSelectNote,onDeleteNote,onSaveNotes }) {
   return (
     <div className="text-display">
       <div className="grid-container">
@@ -19,26 +20,10 @@ function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote,onSaveN
             }
             style={note.style} // Apply style only to the selected note
           >
-            <button
-              className="delete-note-button"
-              onClick={(e) => {
-                e.stopPropagation(); // Prevent the click event from bubbling up to the note div
-                onDeleteNote(note.id);
-              }}
-            >
-              X
-            </button>
-            <button
-              className="save-note-button"
-              onClick={(e) => {
-                e.stopPropagation(); // Prevent the click event from bubbling up to the note div
-                onSaveNotes(note.id);
-              }}
-            >
-              <FontAwesomeIcon icon={faFloppyDisk} />
-            </button>
+            <NoteHandle onDeleteNote={onDeleteNote} onSaveNotes={onSaveNotes} note={note} />
             {note.id === selectedNoteId && note.text === ""
-              ? "" : note.text || "Click to edit..."}          </div>
+              ? "" : note.text || "Click to edit..."}          
+              </div>
         ))}
       </div>
       
