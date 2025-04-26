@@ -569,3 +569,51 @@ body {
   color: white;
   border-color: #3367d6;
 }
+
+
+/**/
+
+.replace-dialog {
+  position: fixed; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #e6f0ff; 
+  border: 2px solid #3399ff;
+  border-radius: 12px;
+  padding: 25px;
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0, 102, 204, 0.4); 
+}
+
+.replace-dialog h3 {
+  color: #0055cc;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.replace-dialog input {
+  display: block;
+  margin: 10px 0;
+  padding: 8px;
+  width: 100%;
+  border: 1px solid #99c2ff;
+  border-radius: 6px;
+}
+
+.replace-dialog button {
+  margin: 5px;
+  padding: 8px 16px;
+  background-color: #3399ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.replace-dialog button:hover {
+  background-color: #2678cc; 
+}
+
+
