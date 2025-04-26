@@ -16,6 +16,7 @@ function TextStyleControls({ onStyleChange, editMode, setEditMode  }) {
           <option value="forward">Edit From Now On</option>
         </select>
       </div>
+      
       <div className='font-size-selector'>
         <div className="style-section">
           <label>Font:</label>

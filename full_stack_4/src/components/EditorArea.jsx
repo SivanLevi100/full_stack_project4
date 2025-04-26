@@ -52,11 +52,11 @@ function EditorArea({
           />
         </div>
         <DeleteKeys onDeleteAll={onDeleteAll} onDeleteChar={onDeleteChar} onDeleteWord={onDeleteWord}/>
-        <AdvancedEditOperations 
+        {/*<AdvancedEditOperations 
           text={text}
           onSearchReplace={onSearchReplace} 
           onUndo={onUndo} 
-        />
+        />*/}
         
       </div>
     </div>

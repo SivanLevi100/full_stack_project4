@@ -8,7 +8,8 @@ import { useState } from "react";
 
 function NotesPage({currentUser, setCurrentUser,showMessage}) {
   const [text, setText] = useState("");
-  const [editMode, setEditMode] = useState("all"); 
+  const [editMode, setEditMode] = useState("all"); // "all" or "forward"
+  //const [cursorPosition, setCursorPosition] = useState(0);
   const [defaultStyle, setDefaultStyle] = useState({ 
     fontFamily: "Arial",
     fontSize: "20px",
@@ -103,30 +104,8 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
   };
 
 
-  /*
-  ערכיה על הכל לא עובד אבל עריכה מכאן והלאה כן
-  const handleKeyPress = (char) => {
-    setNotes((prevNotes) =>
-      prevNotes.map((note) =>
-        note.id === selectedNoteId
-          ? {
-              ...note,
-              text: [
-                ...note.text,
-                {
-                  char,
-                  style: editMode === "forward" ? { ...defaultStyle } : { ...note.style },
-                },
-              ],
-            }
-          : note
-      )
-    );
-  };
-  */
-  
 
-  
+
 
   const handleKeyPress = (char) => {
     setNotes((prevNotes) =>
@@ -153,6 +132,9 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
       )
     );
   };
+   
+  
+
 
   const HandleDeleteChar = () => {
     setNotes((prevNotes) =>
@@ -166,6 +148,7 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
       )
     );
   };
+  
 
   const handleDeleteWord = () => {
     setNotes((prevNotes) =>
@@ -349,10 +332,29 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
   };*/
   
 
-
-  const handleSearchReplace = (searchText, replaceText) => {
-    setText((prev) => prev.replace(new RegExp(searchText, "g"), replaceText));
-  };
+  function handleSearchReplace(searchText, replaceText) {
+    let found = false; // משתנה שיבדוק אם מצאנו משהו
+  
+    setNotes(prevNotes => 
+      prevNotes.map(note => {
+        if (note.text.includes(searchText)) {
+          found = true; // מצאנו, נסמן
+          return {
+            ...note,
+            text: note.text.replaceAll(searchText, replaceText),
+            history: [...note.history, note.text], // שמירת הגרסה הקודמת בהיסטוריה
+          };
+        }
+        return note;
+      })
+    );
+  
+    if (!found) {
+      alert("המילה לא נמצאה");
+    }
+  }
+  
+  
 
   const handleUndo = (selectedNote) => {
       setNotes((prevNotes) =>
@@ -388,6 +390,7 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
           onSaveNotes={saveNoteInFile}
           onUndo={handleUndo}
           showMessage={showMessage}
+          onSearchReplace={handleSearchReplace}
         />
         <EditorArea
           text={text}
@@ -400,7 +403,7 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
           onDeleteWord={handleDeleteWord}
           onSpacePress={handleSpacePress}
           onStyleChange={handleStyleChange}
-          onSearchReplace={handleSearchReplace}
+          //onSearchReplace={handleSearchReplace}
           onUndo={handleUndo}
           onAddNote={handleAddNote}
           editMode={editMode}
