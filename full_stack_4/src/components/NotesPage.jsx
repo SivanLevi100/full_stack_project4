@@ -1,10 +1,10 @@
 //Component for the main page - notes and keyboard
 
-import { useState, useEffect } from "react";
 import TextDisplay from "./TextDisplay";
 import EditorArea from "./EditorArea";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { useState } from "react";
 
 function NotesPage({currentUser, setCurrentUser,showMessage}) {
   const [text, setText] = useState("");
@@ -228,21 +228,36 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
   
     if (isChanged) {
       showMessage(
-        "prompt", //type of message
-        "Do you want to save this note before deleting it? (yes/no)", //message
-        (userResponse) => {
-          if (userResponse === "yes") {
-            saveNoteInFile(id); 
-          }
-          const updatedNotes = notes.filter((note) => note.id !== id);
-          setNotes(updatedNotes);
-          if (selectedNoteId === id) {
-            setSelectedNoteId(null);
-          }
-        }
+        "alert", //type of message
+        "Do you want to save this note before deleting it?", //message
+            () => {
+              saveNoteInFile(id); 
+              const updatedNotes = notes.filter((note) => note.id !== id);
+              setNotes(updatedNotes);
+              if (selectedNoteId === id) {
+              setSelectedNoteId(null);
+            }
+          } 
+          ,
+          () => {
+            const updatedNotes = notes.filter((note) => note.id !== id);
+            setNotes(updatedNotes);
+            if (selectedNoteId === id) {
+              setSelectedNoteId(null);
+            }
+          },
+          "Save",
+          "Don't Save"
       );
     }
+    else{
+      const updatedNotes = notes.filter((note) => note.id !== id);
+            setNotes(updatedNotes);
+            if (selectedNoteId === id) {
+              setSelectedNoteId(null);
+      }
   }
+}
   
 
   const handleStyleChange = (property, value) => {

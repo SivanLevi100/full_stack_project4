@@ -8,7 +8,7 @@ const OpenFiles = ({ currentUser, setNotes, notes,showMessage }) => {
     const noteKey = `note_${currentUser.username}_${fileName.trim()}`;
     const noteJSON = localStorage.getItem(noteKey);
     if (!noteJSON) {
-      showMessage("alert","Note content not found.",() => {});
+      showMessage("alert","Note content not found.");
       return;
     }
 
@@ -17,7 +17,7 @@ const OpenFiles = ({ currentUser, setNotes, notes,showMessage }) => {
       const note = JSON.parse(noteJSON);
       const alreadyExists = notes.some((n) => n.id === note.id);
       if (alreadyExists) {
-        showMessage("alert","File is already open.",() => {});
+        showMessage("alert","File is already open.");
         return;
       }
       console.log("note", note);
@@ -27,7 +27,7 @@ const OpenFiles = ({ currentUser, setNotes, notes,showMessage }) => {
       setSelectedFile("");
       setShowDropdown(false);
     } catch {
-      showMessage("alert","Failed to parse note data.",() => {});
+      showMessage("alert","Failed to parse note data.");
     }
   };
 
@@ -37,21 +37,24 @@ const OpenFiles = ({ currentUser, setNotes, notes,showMessage }) => {
         <>
           {currentUser.files && currentUser.files.length > 0 ? (
             <select
-              value={selectedFile}
-              onChange={(e) => {
-                const file = e.target.value;
+            value=""
+            onChange={(e) => {
+              const file = e.target.value;
+              if (file) { 
                 setSelectedFile(file);
                 handleOpenFile(file);
-              }}
-              className="file-select"
-            >
-              <option value="">📂 Open File</option>
-              {currentUser.files.map((fileName) => (
-                <option key={fileName} value={fileName}>
-                  {fileName}
-                </option>
-              ))}
-            </select>
+              }
+            }}
+            className="file-select"
+          >
+            <option value="">📂 Open File</option>
+            {currentUser.files.map((fileName) => (
+              <option key={fileName} value={fileName}>
+                {fileName}
+              </option>
+            ))}
+          </select>
+          
           ) : (
             <p>No saved files.</p>
           )}

@@ -1,9 +1,26 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-function Message({ isOpen, type = "alert", message, onConfirm, onCancel }) {
+function Message({ isOpen, type = "alert", message, onConfirm, onCancel,confirm,cancel}) {
   const [inputValue, setInputValue] = useState("");
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    if (inputValue !== "") {
+      setInputValue(""); 
+    }
+    return null;
+  }
+
+  const handleConfirmClick = () => {
+    if (type === "prompt") {
+      onConfirm(inputValue);
+    } else {
+      onConfirm();
+    }
+  };
+
+  const handleCancelClick = () => {
+    onCancel();
+  };
 
   return (
     <div className="Message-overlay">
@@ -18,10 +35,8 @@ function Message({ isOpen, type = "alert", message, onConfirm, onCancel }) {
           />
         )}
         <div className="Message-buttons">
-          <button onClick={onConfirm}>
-            OK
-          </button>
-          <button onClick={onCancel}>Cancel</button>
+          <button onClick={handleConfirmClick}>{confirm}</button>
+          <button onClick={handleCancelClick}>{cancel}</button>
         </div>
       </div>
     </div>
