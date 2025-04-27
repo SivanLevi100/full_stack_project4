@@ -1,3 +1,5 @@
+//Pop-up notification component
+
 import { useState } from "react";
 
 function Message({ isOpen, type = "alert", message, onConfirm, onCancel,confirm,cancel}) {
