@@ -20,8 +20,6 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
 
 
   const [notes, setNotes] = useState([]);
-  
-  
   const [selectedNoteId, setSelectedNoteId] = useState(
     notes.length > 0 ? notes[0].id : null
   );
@@ -56,15 +54,11 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
       return;
     }
     // Else, get a new file name from the user
-    console.log("1");
     showMessage("prompt", "Please enter a name for this file:", (fileName) => {
-      console.log("2");
       if (!fileName) {
-        console.log("3");
         showMessage("alert", "File name cannot be empty.", () => {});
         return;
       }
-      console.log("4");
       const trimmedFileName = fileName.trim(); // Remove leading and trailing spaces
       const noteKey = `note_${currentUser.username}_${trimmedFileName}`;
   
@@ -86,7 +80,6 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
       setCurrentUser(updatedUser);
       showMessage("alert", `Note saved as "${trimmedFileName}"`, () => {});
     });
-    console.log("5");
   };
 
 
@@ -246,12 +239,14 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
         "Do you want to save this note before deleting it?", //message
             () => {
               setTimeout(() => {
+                const updatedNotes = notes.filter((note) => note.id !== id);
+                setNotes(updatedNotes);
+                if (selectedNoteId === id) {
+                  setSelectedNoteId(null);
+                }
               saveNoteInFile(id); 
-              const updatedNotes = notes.filter((note) => note.id !== id);
-              setNotes(updatedNotes);
-              if (selectedNoteId === id) {
-                setSelectedNoteId(null);
-              }
+             
+   
             }, 0);
             }
           ,
