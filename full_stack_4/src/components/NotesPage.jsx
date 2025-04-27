@@ -4,6 +4,7 @@ import TextDisplay from "./TextDisplay";
 import EditorArea from "./EditorArea";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 
 function NotesPage({currentUser, setCurrentUser,showMessage}) {
@@ -378,9 +379,16 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
 
   return (
     <div className="notes-page">
+      
+      <div className="user-name">
+        <FontAwesomeIcon icon={faUser} style={{ marginRight: "8px" }} />
+        {currentUser.username}
+      </div>
+
       <button className="logout-btn" onClick={() => setCurrentUser(null)}>
         <FontAwesomeIcon icon={faRightFromBracket} />
       </button>
+
       <div className="app-container">
         <TextDisplay
           notes={notes}
