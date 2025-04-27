@@ -1,26 +1,27 @@
-///Component for displaying notes  
 import React from 'react';  
 import NoteHandle from './NoteHandle';   
 
 function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote, onSaveNotes, onUndo, showMessage, onSearchReplace }) {  
-  // Function to render text with individual character styling
-  
+
   const renderStyledText = (note) => {
     if (!note.text || !Array.isArray(note.text) || note.text.length === 0) {
-      return "Click to edit...";
+      return (
+        <span className="empty-note-placeholder">
+          Click to edit...
+        </span>
+      );
     }
     
     return (
       <span className="note-text">
-        {note.text.map((charObj, index) => (
-          <span key={index} style={charObj.style}>
-            {charObj.char}
+        {note.text.map((block, index) => (
+          <span key={index} style={block.style}>
+            {block.content}
           </span>
         ))}
       </span>
     );
   };
-  
   
   return (
     <div className="text-display">
@@ -29,9 +30,7 @@ function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote, onSave
           <div
             key={note.id}
             className={`note ${note.id === selectedNoteId ? "selected" : ""}`}
-            onClick={() => {
-              onSelectNote(note.id);
-            }}
+            onClick={() => onSelectNote(note.id)}
           >
             <NoteHandle 
               showMessage={showMessage} 
@@ -41,12 +40,7 @@ function TextDisplay({ notes, selectedNoteId, onSelectNote, onDeleteNote, onSave
               onUndo={onUndo} 
               onSearchReplace={onSearchReplace} 
             />
-            
-            {/* Render styled text */}
-            {note.id === selectedNoteId && Array.isArray(note.text) && note.text.length === 0
-              ? ""
-              : renderStyledText(note)
-            }
+            {renderStyledText(note)}
           </div>
         ))}
       </div>

@@ -159,6 +159,7 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  margin-right: 7%;
   gap:0.2rem;
   padding: 0px 20px 0px 0.5rem;
   

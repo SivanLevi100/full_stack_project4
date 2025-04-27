@@ -9,7 +9,6 @@ import OpenFiles from './OpenFiles';
 
 
 function EditorArea({ 
-  text,
   currentUser,
   setNotes,
   notes,
@@ -19,8 +18,6 @@ function EditorArea({
   onDeleteWord,
   onSpacePress,
   onStyleChange,
-  onSearchReplace,
-  onUndo,
   onAddNote,
   editMode,
   setEditMode,
