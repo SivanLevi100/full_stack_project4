@@ -18,7 +18,9 @@ function NoteHandle({ onDeleteNote, onSaveNotes, note, onUndo, onSearchReplace, 
       <button className="replace-text-button"
         onClick={(e) => {
           e.stopPropagation();
-          setIsReplaceDialogOpen(true); 
+          showMessage("replace", "Replace text", (inputValue, secondInputValue) => {
+            onSearchReplace(inputValue, secondInputValue);
+          }, () => {}, "Replace", "Cancel");
         }}>
         <FontAwesomeIcon icon={faSearch} /> 
       </button>
@@ -44,42 +46,6 @@ function NoteHandle({ onDeleteNote, onSaveNotes, note, onUndo, onSearchReplace, 
       }}>
         X
       </button>
-
-
-      {/* Replace Inputs directly in the NoteHandle */}
-      {/*{isReplaceDialogOpen && showMessage("alert", `Note updated in file "${existingFileName}"`, () => {})}*/}
-
-      {isReplaceDialogOpen && (
-        <div className="replace-inputs">
-          <input 
-            type="text" 
-            placeholder="Search" 
-            value={searchText} 
-            onChange={(e) => setSearchText(e.target.value)} 
-          />
-          <input 
-            type="text" 
-            placeholder="Replace with" 
-            value={replaceText} 
-            onChange={(e) => setReplaceText(e.target.value)} 
-          />
-          <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              onSearchReplace(searchText, replaceText);
-              setIsReplaceDialogOpen(false); // Close after replacing
-            }}
-          >
-            <FontAwesomeIcon icon={faExchangeAlt} />
-            Replace
-          </button>
-          <button 
-            onClick={() => setIsReplaceDialogOpen(false)}
-          >
-            Cancel
-          </button>
-        </div>
-      )}
 
       
     </div>

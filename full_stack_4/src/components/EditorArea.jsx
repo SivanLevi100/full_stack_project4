@@ -42,6 +42,8 @@ function EditorArea({
         <VirtualKeyboard onKeyPress={onKeyPress} onSpacePress={onSpacePress} />
       </div>
       <div className="side-panel">
+      <DeleteKeys onDeleteAll={onDeleteAll} onDeleteChar={onDeleteChar} onDeleteWord={onDeleteWord}/>
+
         <div className='notes-header'>
           <button className='add-note-button' onClick={onAddNote} title="add new note">+ Add Note</button>
           <OpenFiles
@@ -51,12 +53,6 @@ function EditorArea({
             showMessage={showMessage}
           />
         </div>
-        <DeleteKeys onDeleteAll={onDeleteAll} onDeleteChar={onDeleteChar} onDeleteWord={onDeleteWord}/>
-        {/*<AdvancedEditOperations 
-          text={text}
-          onSearchReplace={onSearchReplace} 
-          onUndo={onUndo} 
-        />*/}
         
       </div>
     </div>

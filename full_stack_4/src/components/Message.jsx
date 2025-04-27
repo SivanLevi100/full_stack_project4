@@ -1,13 +1,13 @@
-//Pop-up notification component
-
 import { useState } from "react";
 
-function Message({ isOpen, type = "alert", message, onConfirm, onCancel,confirm,cancel}) {
+function Message({ isOpen, type = "alert", message, onConfirm, onCancel, confirm, cancel }) {
   const [inputValue, setInputValue] = useState("");
+  const [secondInputValue, setSecondInputValue] = useState(""); 
 
   if (!isOpen) {
-    if (inputValue !== "") {
+    if (inputValue !== "" || secondInputValue !== "") { 
       setInputValue(""); 
+      setSecondInputValue("");
     }
     return null;
   }
@@ -15,6 +15,8 @@ function Message({ isOpen, type = "alert", message, onConfirm, onCancel,confirm,
   const handleConfirmClick = () => {
     if (type === "prompt") {
       onConfirm(inputValue);
+    } else if (type === "replace") {
+      onConfirm(inputValue, secondInputValue); // שולח שני ערכים
     } else {
       onConfirm();
     }
@@ -35,6 +37,22 @@ function Message({ isOpen, type = "alert", message, onConfirm, onCancel,confirm,
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Enter your input"
           />
+        )}
+        {type === "replace" && (
+          <>
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder="Enter the text to replace"
+            />
+            <input
+              type="text"
+              value={secondInputValue}
+              onChange={(e) => setSecondInputValue(e.target.value)}
+              placeholder="Enter the new text"
+            />
+          </>
         )}
         <div className="Message-buttons">
           <button onClick={handleConfirmClick}>{confirm}</button>

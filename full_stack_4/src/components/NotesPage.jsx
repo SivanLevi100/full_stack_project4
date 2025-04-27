@@ -40,21 +40,7 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
     ]
   );
   */
-  const [notes, setNotes] = useState([
-    {
-      id: 1,
-      text: [], // Initialize as an empty array of character objects
-      history: [],
-      style: {
-        fontFamily: "Arial",
-        fontSize: "20px",
-        color: "black",
-        fontWeight: "normal",
-        fontStyle: "normal",
-        textDecoration: "none",
-      },
-    }
-  ]);
+  const [notes, setNotes] = useState([]);
   
   
   const [selectedNoteId, setSelectedNoteId] = useState(
@@ -740,6 +726,10 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
 
 
   function handleSearchReplace(searchText, replaceText) {
+    if (searchText===null || replaceText=== null) {
+      showMessage("alert", "Please enter both search and replace text.");
+      return; 
+    }
     let found = false;
     
     setNotes(prevNotes => 
@@ -784,7 +774,7 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
     );
     
     if (!found) {
-      alert("המילה לא נמצאה");
+      showMessage("alert", "No matches found for the search text.");
     }
   }
   

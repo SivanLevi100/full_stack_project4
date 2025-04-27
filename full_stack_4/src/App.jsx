@@ -24,8 +24,8 @@ export default function App() {
     setCancel(cancel || "Cancel");
   };
 
-  const handleConfirm = (inputValue = null) => {
-    onConfirm(inputValue);
+  const handleConfirm = (inputValue = null,secondInput=null) => {
+    onConfirm(inputValue,secondInput);
     closeMessage();
   };
 

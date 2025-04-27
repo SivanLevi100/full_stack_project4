@@ -6,6 +6,9 @@
 
 
 body {
+  background-image: url("https://i.pinimg.com/736x/6c/52/7a/6c527ac19f0f78d19c9f83b233740b8c.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -58,6 +61,8 @@ body {
 
 
 .text-display {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  border: 1px solid #ccc;
   flex-grow: 1;
   min-height: 150px;
   max-height: 300px;
@@ -68,10 +73,9 @@ body {
   white-space: normal;
   width: 85%;
   text-align: center;
-  border: 1px solid #ccc;
   border-radius: 8px;
   padding: 1rem;
-  background-color: #2a3b4c;
+  background-color: #2a3b4c33;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin:1rem 0px ;
 }
@@ -85,15 +89,13 @@ body {
   gap: 2rem;
   align-items: center;
   justify-content: center;
-  background-color:  #2a3b4c;;
   border-radius: 12px;
   width: 95vw;
 }
 
 .side-panel {
-  background-color: #2a3b4cb9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  width: 30vw;
+  border: 1px dashed #ccc;
+  width: 20vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -326,6 +328,7 @@ body {
   justify-content: space-around;
   align-items: center;
   width: 100%;
+  margin-top: 1em ;
 }
 
 .add-note-button {
