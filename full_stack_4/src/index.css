@@ -689,6 +689,7 @@ body {
 
 /****************************Find and Replace dialog box**************************/
 
+
 .replace-inputs {
   display: flex;
   flex-direction: column;

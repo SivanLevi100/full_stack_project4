@@ -124,6 +124,8 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
   };
   */
 
+
+  
   const saveNoteInFile = (noteID) => {
     console.log("Saving note with ID:", noteID);
     const note = notes.find((note) => note.id === noteID);
@@ -808,7 +810,7 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
       );
   };
 
-  
+
   return (
     <div className="notes-page">
       

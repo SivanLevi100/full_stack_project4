@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 
-export default function LoginPage({ setCurrentUser }) {
+export default function LoginPage({ setCurrentUser,showMessage }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isRegister, setIsRegister] = useState(false);

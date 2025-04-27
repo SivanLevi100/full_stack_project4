@@ -30,6 +30,7 @@ function NoteHandle({ onDeleteNote, onSaveNotes, note, onUndo, onSearchReplace, 
         <FontAwesomeIcon icon={faRotateBackward} />
       </button>
 
+
       <button className="save-note-button" onClick={(e) => {
         e.stopPropagation();
         onSaveNotes(note.id);
@@ -43,6 +44,7 @@ function NoteHandle({ onDeleteNote, onSaveNotes, note, onUndo, onSearchReplace, 
       }}>
         X
       </button>
+
 
       {/* Replace Inputs directly in the NoteHandle */}
       {/*{isReplaceDialogOpen && showMessage("alert", `Note updated in file "${existingFileName}"`, () => {})}*/}
