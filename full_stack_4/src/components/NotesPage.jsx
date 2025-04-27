@@ -403,7 +403,6 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
           onDeleteWord={handleDeleteWord}
           onSpacePress={handleSpacePress}
           onStyleChange={handleStyleChange}
-          //onSearchReplace={handleSearchReplace}
           onUndo={handleUndo}
           onAddNote={handleAddNote}
           editMode={editMode}

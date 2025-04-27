@@ -123,6 +123,9 @@ function NoteHandle({ onDeleteNote, onSaveNotes, note, onUndo, onSearchReplace }
           </button>
         </div>
       )}
+
+
+      
     </div>
   );
 }

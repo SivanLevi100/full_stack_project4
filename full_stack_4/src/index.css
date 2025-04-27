@@ -404,13 +404,13 @@ body {
 /***************************notes-display*****************************/
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* עד 3 עמודות */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Up to 3 columns*/
   gap: 1rem; 
   justify-content: center; 
   padding: 1rem;
 }
 
-/* עיצוב הפתקים */
+/*Note design*/
 .note {
   display: flex;
   flex-direction: column;
@@ -427,6 +427,10 @@ body {
   width: 300px;
   height: 100px;
   margin: 0 auto;
+  overflow: auto;         /* enable scrolling if needed */
+  white-space: pre-wrap;  /* preserve whitespace and wrap text */
+  word-wrap: break-word;  /* break long words to prevent overflow */
+
 
 }
 .note:hover {
@@ -449,9 +453,11 @@ body {
   justify-content: flex-end;
   align-items: center;
   gap: 0.5rem;
+
+
 }
 
-/* כפתור מחיקת פתק */
+/* Delete note button*/
 .delete-note-button {
   top: 5px;
   right: 5px;
@@ -469,6 +475,7 @@ body {
   background-color: #ff1a1a;
 }
 
+/*Save note button*/
 .save-note-button {
   background-color: #4CAF50;
   color: #f9f9f9;
@@ -483,6 +490,7 @@ body {
   background-color: #45a049;
 }
 
+/*undo button*/
 .undo-button{
   padding: 0px 5px;
   background-color: #3688f4;
@@ -499,7 +507,24 @@ body {
   color: #f9f9f9;
 }
 
-/*****************login page*******************/
+/*Search and replace button*/
+.replace-text-button{
+  padding: 0px 5px;
+  background-color: #65686d;
+  color: #f9f9f9;
+  border: none;
+  border-radius: 10%;
+  height: 20px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  
+}
+.replace-text-button:hover{
+  background-color: #376899;
+}
+
+
+/***************************login page***************************/
 .login-container {
   display: flex;
   justify-content: center;
@@ -554,24 +579,7 @@ body {
   padding: 0;
 }
 
-
-/*עיצוב כפתורי עריכה מכאן והלאה או על כל הטקסט*/
-.apply-mode-button {
-  padding: 5px 10px;
-  margin: 0 5px;
-  border: 1px solid #ccc;
-  background-color: #f8f8f8;
-  cursor: pointer;
-}
-
-.apply-mode-button.active {
-  background-color: #4285f4;
-  color: white;
-  border-color: #3367d6;
-}
-
-
-/*******************messages*******************/
+/***************************messages***************************/
 .Message-overlay {
   position: fixed;
   top: 0;
@@ -642,7 +650,8 @@ body {
 
 
 
-/**/
+/****************************Find and Replace dialog box**************************/
+
 
 .replace-dialog {
   position: fixed; 
@@ -687,4 +696,26 @@ body {
   background-color: #2678cc; 
 }
 
+
+
+
+
+
+
+
+
+/*עיצוב כפתורי עריכה מכאן והלאה או על כל הטקסט*/
+.apply-mode-button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  cursor: pointer;
+}
+
+.apply-mode-button.active {
+  background-color: #4285f4;
+  color: white;
+  border-color: #3367d6;
+}
 
