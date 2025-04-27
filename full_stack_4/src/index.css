@@ -290,6 +290,35 @@ body {
 }
 
 
+.edit-mode-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.edit-mode-selector label {
+  font-weight: 500;
+  color: #f9f9f9;
+}
+
+.edit-mode-selector select {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  color: #213547;
+  font-family: inherit;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.edit-mode-selector select:hover {
+  background-color: #e0e0e0;
+  color: #213547;
+}
+
+
+
 
 /************************right-side-panel**************************/
 .notes-header{
@@ -660,50 +689,57 @@ body {
 
 /****************************Find and Replace dialog box**************************/
 
-
-.replace-dialog {
-  position: fixed; 
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #e6f0ff; 
-  border: 2px solid #3399ff;
-  border-radius: 12px;
-  padding: 25px;
-  z-index: 1000;
-  box-shadow: 0 4px 15px rgba(0, 102, 204, 0.4); 
+.replace-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%; /* or specific width based on your design */
+  margin-top: 3rem; /* Increase this value to push the section further down */
 }
 
-.replace-dialog h3 {
-  color: #0055cc;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-.replace-dialog input {
-  display: block;
-  margin: 10px 0;
+.replace-inputs input {
   padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
   width: 100%;
-  border: 1px solid #99c2ff;
-  border-radius: 6px;
+  box-sizing: border-box;
 }
 
-.replace-dialog button {
-  margin: 5px;
-  padding: 8px 16px;
-  background-color: #3399ff;
-  color: white;
+.replace-inputs button {
+  background-color: #4CAF50;
+  color: #f9f9f9;
   border: none;
-  border-radius: 6px;
+  border-radius: 10%;
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5rem;
 }
 
-.replace-dialog button:hover {
-  background-color: #2678cc; 
+.replace-inputs button:hover {
+  background-color: #45a049;
 }
 
+.replace-inputs button:last-child {
+  background-color: #dc3545;
+  margin-top: 0.5rem;
+}
+
+.replace-inputs button:last-child:hover {
+  background-color: #c82333;
+}
+
+.replace-inputs button > .fa-exchange-alt {
+  margin-right: 8px;
+}
 
 
 
@@ -713,7 +749,7 @@ body {
 
 
 /*עיצוב כפתורי עריכה מכאן והלאה או על כל הטקסט*/
-.apply-mode-button {
+/*.apply-mode-button {
   padding: 5px 10px;
   margin: 0 5px;
   border: 1px solid #ccc;
@@ -725,5 +761,5 @@ body {
   background-color: #4285f4;
   color: white;
   border-color: #3367d6;
-}
+}*/
 

@@ -1,61 +1,13 @@
-//Note management component
-/*
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFloppyDisk,faRotateBackward } from '@fortawesome/free-solid-svg-icons';
-function NoteHandle({onDeleteNote, onSaveNotes,note,onUndo,onSearchReplace}) {
 
-
-  return (
-    <div className="note-handle">
-      <button className="undo-button" onClick={(e) => {
-        e.stopPropagation(); // Prevent the click event from bubbling up to the note div
-        onUndo(note);
-      }}>
-        <FontAwesomeIcon icon={faRotateBackward} />
-      </button>
-      <button
-        className="save-note-button"
-        onClick={(e) => {
-          e.stopPropagation(); // Prevent the click event from bubbling up to the note div
-          onSaveNotes(note.id);
-        }}
-      >
-        <FontAwesomeIcon icon={faFloppyDisk} />
-      </button>
-      <button
-        className="delete-note-button"
-        onClick={(e) => {
-          e.stopPropagation(); // Prevent the click event from bubbling up to the note div
-          onDeleteNote(note.id);
-        }}
-      >
-        X
-      </button>
-
-      <button
-       className="replace-text-button"
-       onClick={(e) => {
-       e.stopPropagation(); // שלא ילחץ בטעות גם על הפתק
-       onSearchReplace(searchText, replaceText); // נקרא לפונקציה שכתבנו
-         }}
-        >
-       🔄 החלף
-      </button>
-
-
-    </div>
-  );
-}
-export default NoteHandle;
-*/
 // Note management component
+
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFloppyDisk, faRotateBackward } from '@fortawesome/free-solid-svg-icons';
 import { faSearch, faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 
 
-function NoteHandle({ onDeleteNote, onSaveNotes, note, onUndo, onSearchReplace }) {
+function NoteHandle({ onDeleteNote, onSaveNotes, note, onUndo, onSearchReplace, showMessage }) {
   const [isReplaceDialogOpen, setIsReplaceDialogOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [replaceText, setReplaceText] = useState("");
@@ -92,38 +44,40 @@ function NoteHandle({ onDeleteNote, onSaveNotes, note, onUndo, onSearchReplace }
         X
       </button>
 
-     
+      {/* Replace Inputs directly in the NoteHandle */}
+      {/*{isReplaceDialogOpen && showMessage("alert", `Note updated in file "${existingFileName}"`, () => {})}*/}
 
-      {/* הדיאלוג יופיע רק אם נפתח */}
       {isReplaceDialogOpen && (
-        <div className="replace-dialog">
-          <h3>חיפוש והחלפה</h3>
-          <input
-            type="text"
-            placeholder="טקסט לחיפוש"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
+        <div className="replace-inputs">
+          <input 
+            type="text" 
+            placeholder="Search" 
+            value={searchText} 
+            onChange={(e) => setSearchText(e.target.value)} 
           />
-          <input
-            type="text"
-            placeholder="טקסט להחלפה"
-            value={replaceText}
-            onChange={(e) => setReplaceText(e.target.value)}
+          <input 
+            type="text" 
+            placeholder="Replace with" 
+            value={replaceText} 
+            onChange={(e) => setReplaceText(e.target.value)} 
           />
-          <button onClick={() => {
-            onSearchReplace(searchText, replaceText); // מבצע חיפוש והחלפה
-            setIsReplaceDialogOpen(false); // סוגר את הדיאלוג
-            setSearchText(""); // מאפס קלטים
-            setReplaceText("");
-          }}>
-            אישור
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              onSearchReplace(searchText, replaceText);
+              setIsReplaceDialogOpen(false); // Close after replacing
+            }}
+          >
+            <FontAwesomeIcon icon={faExchangeAlt} />
+            Replace
           </button>
-          <button onClick={() => setIsReplaceDialogOpen(false)}>
-            ביטול
+          <button 
+            onClick={() => setIsReplaceDialogOpen(false)}
+          >
+            Cancel
           </button>
         </div>
       )}
-
 
       
     </div>

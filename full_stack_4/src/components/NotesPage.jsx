@@ -6,11 +6,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import LZString from 'lz-string';
 
 function NotesPage({currentUser, setCurrentUser,showMessage}) {
   const [text, setText] = useState("");
   const [editMode, setEditMode] = useState("all"); // "all" or "forward"
-  //const [cursorPosition, setCursorPosition] = useState(0);
   const [defaultStyle, setDefaultStyle] = useState({ 
     fontFamily: "Arial",
     fontSize: "20px",
@@ -20,6 +20,8 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
     textDecoration: "none",
   });
 
+
+  /*
   const [notes, setNotes] = useState(
     [{
         id: 1,
@@ -34,15 +36,32 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
           textDecoration: "none",
         },
       },
+      
     ]
   );
+  */
+  const [notes, setNotes] = useState([
+    {
+      id: 1,
+      text: [], // Initialize as an empty array of character objects
+      history: [],
+      style: {
+        fontFamily: "Arial",
+        fontSize: "20px",
+        color: "black",
+        fontWeight: "normal",
+        fontStyle: "normal",
+        textDecoration: "none",
+      },
+    }
+  ]);
   
   
   const [selectedNoteId, setSelectedNoteId] = useState(
     notes.length > 0 ? notes[0].id : null
   );
   
-  
+  /*
   const saveNoteInFile = (noteID) => {
     console.log("Saving note with ID:", noteID);
     const note = notes.find((note) => note.id === noteID);
@@ -103,11 +122,114 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
     });
     console.log("5");
   };
+  */
+
+  const saveNoteInFile = (noteID) => {
+    console.log("Saving note with ID:", noteID);
+    const note = notes.find((note) => note.id === noteID);
+    if (!note) {
+      showMessage("alert", "Note not found.", () => {});
+      return;
+    }
+  
+    // דחיסת הנתונים - פונקציה חדשה שמחזירה גרסה דחוסה של הפתק
+    const compressNote = (originalNote) => {
+      // מיפוי סגנונות ייחודיים
+      const uniqueStyles = [];
+      const styleMap = new Map();
+      
+      // נבנה מבנה דחוס יותר של הטקסט
+      const compressedText = originalNote.text.map(charObj => {
+        // נמיר את הסגנון למחרוזת להשוואה מהירה
+        const styleStr = JSON.stringify(charObj.style);
+        
+        // נוסיף סגנון חדש למאגר אם לא קיים
+        if (!styleMap.has(styleStr)) {
+          styleMap.set(styleStr, uniqueStyles.length);
+          uniqueStyles.push(charObj.style);
+        }
+        
+        // נחזיר אובייקט מצומצם עם התו ואינדקס הסגנון
+        return {
+          c: charObj.char,
+          s: styleMap.get(styleStr)
+        };
+      });
+      
+      // נחזיר אובייקט דחוס
+      return {
+        id: originalNote.id,
+        t: compressedText,
+        s: uniqueStyles,
+        // לא שומרים את ההיסטוריה בלוקל סטורג' כדי לחסוך מקום
+      };
+    };
+    
+    // נדחוס את הפתק
+    const compressedNote = compressNote(note);
+    
+    // נמיר לJSON ונדחוס שוב באמצעות LZString
+    const jsonData = JSON.stringify(compressedNote);
+    const compressedData = LZString.compress(jsonData);
+  
+    // בדיקה אם הפתק כבר קיים בלוקל סטורג'
+    const existingFileName = currentUser.files?.find((fileName) => {
+      const storedData = localStorage.getItem(`note_${currentUser.username}_${fileName}`);
+      if (!storedData) return false;
+      try {
+        const decompressedData = LZString.decompress(storedData);
+        const parsedFile = JSON.parse(decompressedData);
+        return parsedFile.id === noteID;
+      } catch {
+        return false;
+      }
+    });
+  
+    if (existingFileName) {
+      // עדכון פתק קיים
+      const noteKey = `note_${currentUser.username}_${existingFileName}`;
+      localStorage.setItem(noteKey, compressedData);
+      showMessage("alert", `Note updated in file "${existingFileName}"`, () => {});
+      return;
+    }
+    
+    // יצירת פתק חדש
+    showMessage("prompt", "Please enter a name for this file:", (fileName) => {
+      if (!fileName) {
+        showMessage("alert", "File name cannot be empty.", () => {});
+        return;
+      }
+      
+      const trimmedFileName = fileName.trim();
+      const noteKey = `note_${currentUser.username}_${trimmedFileName}`;
+  
+      // בדיקה אם קיים פתק בשם זה
+      if (localStorage.getItem(noteKey)) {
+        showMessage("alert", "A file with this name already exists.", () => {});
+        return;
+      }
+  
+      // שמירה בלוקל סטורג'
+      localStorage.setItem(noteKey, compressedData);
+  
+      const updatedUser = {
+        ...currentUser,
+        files: [...(currentUser.files || []), trimmedFileName],
+      };
+  
+      localStorage.setItem(`user_${currentUser.username}`, JSON.stringify(updatedUser));
+      setCurrentUser(updatedUser);
+      showMessage("alert", `Note saved as "${trimmedFileName}"`, () => {});
+    });
+  };
+  
 
 
 
 
 
+  
+  /*
   const handleKeyPress = (char) => {
     setNotes((prevNotes) =>
       prevNotes.map((note) =>
@@ -119,12 +241,41 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
       )
     );
   };
+  */
+
+  
+  const handleKeyPress = (char) => {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) => {
+        if (note.id === selectedNoteId) {
+          // Create a copy of the note for history
+          const noteCopy = { ...note };
+          
+          // Add new character with the appropriate style
+          const newCharObj = {
+            char: char,
+            style: editMode === "forward" ? { ...defaultStyle } : { ...note.style }
+          };
+          
+          return {
+            ...note,
+            text: [...note.text, newCharObj],
+            history: [...note.history.slice(-3), noteCopy]
+          };
+        }
+        return note;
+      })
+    );
+  };
+
 
 
   const handleSpacePress = () => {
     handleKeyPress(" ");
   };
 
+
+/*
   const HandleDeleteAll = () => {
     setNotes((prevNotes) =>
       prevNotes.map((note) =>
@@ -133,10 +284,27 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
       )
     );
   };
+  */
+  const HandleDeleteAll = () => {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) => {
+        if (note.id === selectedNoteId) {
+          const noteCopy = { ...note };
+          return {
+            ...note,
+            text: [],
+            history: [...note.history.slice(-3), noteCopy]
+          };
+        }
+        return note;
+      })
+    );
+  };
    
   
 
 
+  /*
   const HandleDeleteChar = () => {
     setNotes((prevNotes) =>
       prevNotes.map((note) =>
@@ -149,8 +317,26 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
       )
     );
   };
+  */
+
+  const HandleDeleteChar = () => {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) => {
+        if (note.id === selectedNoteId) {
+          const noteCopy = { ...note };
+          return {
+            ...note,
+            text: note.text.slice(0, -1),
+            history: [...note.history.slice(-3), noteCopy]
+          };
+        }
+        return note;
+      })
+    );
+  };
   
 
+  /*
   const handleDeleteWord = () => {
     setNotes((prevNotes) =>
       prevNotes.map((note) => {
@@ -171,8 +357,29 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
       })
     );
   };
+  */
+  const handleDeleteWord = () => {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) => {
+        if (note.id === selectedNoteId) {
+          const noteCopy = { ...note };
+          // Reconstruct full text to find the last word
+          const fullText = note.text.map(c => c.char).join('');
+          const trimmedText = fullText.trimEnd();
+          const lastSpaceIndex = trimmedText.lastIndexOf(" ");
+          
+          return {
+            ...note,
+            text: lastSpaceIndex === -1 ? [] : note.text.slice(0, lastSpaceIndex + 1),
+            history: [...note.history.slice(-3), noteCopy]
+          };
+        }
+        return note;
+      })
+    );
+  };
 
-
+  /*
   const handleAddNote = () => {
     if (notes.length < 6) {
       const newNote = {
@@ -193,7 +400,30 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
       setSelectedNoteId(newNote.id);
     }
   };
+  */
+  const handleAddNote = () => {
+    if (notes.length < 6) {
+      const newNote = {
+        id: Date.now(),
+        text: [],
+        style: {
+          fontFamily: "Arial",
+          fontSize: "20px",
+          color: "black",
+          fontWeight: "normal",
+          fontStyle: "normal",
+          textDecoration: "none",
+        },
+        history: [],
+      };
+      const updatedNotes = [...notes, newNote];
+      setNotes(updatedNotes);
+      setSelectedNoteId(newNote.id);
+    }
+  };
 
+
+  /*
   const handleDeleteNote = (id) => {
     const noteToDelete = notes.find((note) => note.id === id);
     if (!noteToDelete) return;
@@ -247,9 +477,181 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
               setSelectedNoteId(null);
       }
   }
-}
+  }
+  */
+
+  const handleDeleteNote = (id) => {
+    const noteToDelete = notes.find((note) => note.id === id);
+    if (!noteToDelete) return;
+  
+    // חיפוש הפתק השמור בלוקל סטורג'
+    let savedFileName = null;
+    let savedNote = null;
+  
+    if (currentUser?.files) {
+      for (const fileName of currentUser.files) {
+        const compressedData = localStorage.getItem(`note_${currentUser.username}_${fileName}`);
+        if (!compressedData) continue;
+        
+        try {
+          // נסה לפענח את הנתונים הדחוסים
+          let parsedData;
+          try {
+            const jsonData = LZString.decompress(compressedData);
+            parsedData = JSON.parse(jsonData);
+          } catch {
+            // אם הפענוח נכשל, נסה לפרסר ישירות (אולי זה פתק ישן)
+            parsedData = JSON.parse(compressedData);
+          }
+          
+          if (parsedData.id === id) {
+            savedFileName = fileName;
+            
+            // בדוק אם זה במבנה הדחוס החדש
+            if (parsedData.t && parsedData.s) {
+              // המר את המבנה הדחוס למבנה המקורי לצורך השוואה
+              const decompressedText = parsedData.t.map(item => ({
+                char: item.c,
+                style: {...parsedData.s[item.s]}
+              }));
+              
+              savedNote = {
+                text: decompressedText
+              };
+            } else {
+              // זהו פתק בפורמט הישן
+              savedNote = parsedData;
+            }
+            break;
+          }
+        } catch (error) {
+          console.error("Error parsing note data:", error);
+          continue;
+        }
+      }
+    }
+  
+    // השוואת התוכן
+    const isChanged = !savedNote || !areNotesEqual(noteToDelete, savedNote);
+  
+    if (isChanged) {
+      showMessage(
+        "alert",
+        "Do you want to save this note before deleting it?",
+        () => {
+          setTimeout(() => {
+            saveNoteInFile(id);
+            const updatedNotes = notes.filter((note) => note.id !== id);
+            setNotes(updatedNotes);
+            if (selectedNoteId === id) {
+              setSelectedNoteId(null);
+            }
+          }, 0);
+        },
+        () => {
+          const updatedNotes = notes.filter((note) => note.id !== id);
+          setNotes(updatedNotes);
+          if (selectedNoteId === id) {
+            setSelectedNoteId(null);
+          }
+        },
+        "Save",
+        "Don't Save"
+      );
+    } else {
+      const updatedNotes = notes.filter((note) => note.id !== id);
+      setNotes(updatedNotes);
+      if (selectedNoteId === id) {
+        setSelectedNoteId(null);
+      }
+    }
+  };
+  
+  // פונקציית עזר להשוואת פתקים
+  const areNotesEqual = (note1, note2) => {
+    // אם מספר התווים שונה, הפתקים שונים
+    if (note1.text.length !== note2.text.length) return false;
+    
+    // השוואת כל תו ותו
+    for (let i = 0; i < note1.text.length; i++) {
+      const char1 = note1.text[i];
+      const char2 = note2.text[i];
+      
+      if (char1.char !== char2.char) return false;
+      
+      // השוואת סגנון בסיסי (אפשר להרחיב את ההשוואה לפי הצורך)
+      if (char1.style.fontFamily !== char2.style.fontFamily ||
+          char1.style.fontSize !== char2.style.fontSize ||
+          char1.style.color !== char2.style.color ||
+          char1.style.fontWeight !== char2.style.fontWeight ||
+          char1.style.fontStyle !== char2.style.fontStyle ||
+          char1.style.textDecoration !== char2.style.textDecoration) {
+        return false;
+      }
+    }
+    
+    return true;
+  };
+
+
+
+
+  const handleStyleChange = (property, value) => {
+    if (editMode === "all") {
+      // When editing all, update each character's style
+      setNotes((prevNotes) =>
+        prevNotes.map((note) => {
+          if (note.id === selectedNoteId) {
+            const noteCopy = { ...note };
+            return {
+              ...note,
+              text: note.text.map(charObj => {
+                const newStyle = { ...charObj.style };
+                switch (property) {
+                  case "bold":
+                    newStyle.fontWeight = newStyle.fontWeight === "bold" ? "normal" : "bold";
+                    break;
+                  case "italic":
+                    newStyle.fontStyle = newStyle.fontStyle === "italic" ? "normal" : "italic";
+                    break;
+                  case "underline":
+                    newStyle.textDecoration = newStyle.textDecoration === "underline" ? "none" : "underline";
+                    break;
+                  default:
+                    newStyle[property] = value;
+                }
+                return { ...charObj, style: newStyle };
+              }),
+              history: [...note.history.slice(-3), noteCopy]
+            };
+          }
+          return note;
+        })
+      );
+    } else if (editMode === "forward") {
+      // When editing from now on, update the default style for new characters
+      setDefaultStyle((prevStyle) => {
+        const newStyle = { ...prevStyle };
+        switch (property) {
+          case "bold":
+            newStyle.fontWeight = newStyle.fontWeight === "bold" ? "normal" : "bold";
+            break;
+          case "italic":
+            newStyle.fontStyle = newStyle.fontStyle === "italic" ? "normal" : "italic";
+            break;
+          case "underline":
+            newStyle.textDecoration = newStyle.textDecoration === "underline" ? "none" : "underline";
+            break;
+          default:
+            newStyle[property] = value;
+        }
+        return newStyle;
+      });
+    }
+  };
   
 
+  /*
   const handleStyleChange = (property, value) => {
     if (editMode === "all") {
       setNotes((prevNotes) =>
@@ -299,6 +701,7 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
       });
     }
   };
+  */
   
   
 
@@ -331,31 +734,59 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
       )
     );
   };*/
-  
+
+
 
   function handleSearchReplace(searchText, replaceText) {
-    let found = false; // משתנה שיבדוק אם מצאנו משהו
-  
+    let found = false;
+    
     setNotes(prevNotes => 
       prevNotes.map(note => {
-        if (note.text.includes(searchText)) {
-          found = true; // מצאנו, נסמן
+        // Reconstruct full text to search
+        const fullText = note.text.map(c => c.char).join('');
+        
+        if (fullText.includes(searchText)) {
+          found = true;
+          
+          // Create new text array with replacements
+          let newText = [];
+          let i = 0;
+          
+          while (i < fullText.length) {
+            if (fullText.substring(i, i + searchText.length) === searchText) {
+              // Found a match, add replacement characters with current style
+              const currentStyle = i < note.text.length ? { ...note.text[i].style } : { ...note.style };
+              
+              for (let j = 0; j < replaceText.length; j++) {
+                newText.push({
+                  char: replaceText[j],
+                  style: currentStyle
+                });
+              }
+              i += searchText.length;
+            } else {
+              // No match, keep the original character
+              newText.push(note.text[i]);
+              i++;
+            }
+          }
+          
           return {
             ...note,
-            text: note.text.replaceAll(searchText, replaceText),
-            history: [...note.history, note.text], // שמירת הגרסה הקודמת בהיסטוריה
+            text: newText,
+            history: [...note.history, note]
           };
         }
         return note;
       })
     );
-  
+    
     if (!found) {
       alert("המילה לא נמצאה");
     }
   }
   
-  
+
 
   const handleUndo = (selectedNote) => {
       setNotes((prevNotes) =>
@@ -377,6 +808,7 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
       );
   };
 
+  
   return (
     <div className="notes-page">
       
