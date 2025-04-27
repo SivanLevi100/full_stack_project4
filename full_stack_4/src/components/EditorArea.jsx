@@ -4,7 +4,6 @@ import React from 'react';
 import VirtualKeyboard from "./VirtualKeyboard";
 import DeleteKeys from "./DeleteKeys";
 import TextStyleControls from "./TextStyleControls";
-import AdvancedEditOperations from "./AdvancedEditOperations";
 import OpenFiles from './OpenFiles';
 
 
