@@ -43,9 +43,8 @@ body {
   border: none;
   font-size: 2rem;
   cursor: pointer;
-  /*top:10px;*/
+  top:5%;
   right: 10px;
-  margin-top: -40px;
 }
 .logout-btn:hover{
   color: #f44336;
@@ -56,7 +55,9 @@ body {
   position: absolute;
   font-size: 1.4rem;
   color: white; 
-  margin-top: -45px;
+  top:4%;
+  display: flex;
+  flex-direction: column;
 }
 
 
