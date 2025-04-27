@@ -342,9 +342,11 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
     }
   };
   
+  
   function handleSearchReplace(searchText, replaceText) {
     if (!searchText || !replaceText) {
-      showMessage("alert", "Please enter both search and replace text.", () => {});
+      alert("Please enter both search and replace text.")
+      //showMessage("alert", "Please enter both search and replace text.", () => {});
       return;
     }
     
@@ -385,9 +387,11 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
     );
     
     if (!found) {
-      showMessage("alert", "No matches found for the search text.", () => {});
+      alert("No matches found for the search text.");
+      //showMessage("alert", "No matches found for the search text.", () => {});
     } else {
-      showMessage("alert", "Text replacement completed.", () => {});
+      alert("Text replacement completed.");
+      //showMessage("alert", "Text replacement completed.", () => {});
     }
   }
   
@@ -398,7 +402,6 @@ function NotesPage({currentUser, setCurrentUser,showMessage}) {
             if (note.history.length === 0) {
               return note;
             }
-    
             
             const lastState = note.history[note.history.length - 1];
             return {

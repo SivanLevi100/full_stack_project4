@@ -8,10 +8,7 @@ import { faSearch, faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 
 
 function NoteHandle({ onDeleteNote, onSaveNotes, note, onUndo, onSearchReplace, showMessage }) {
-  const [isReplaceDialogOpen, setIsReplaceDialogOpen] = useState(false);
-  const [searchText, setSearchText] = useState("");
-  const [replaceText, setReplaceText] = useState("");
-
+ 
   return (
     <div className="note-handle">
 

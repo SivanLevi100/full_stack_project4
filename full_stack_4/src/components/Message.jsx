@@ -16,7 +16,7 @@ function Message({ isOpen, type = "alert", message, onConfirm, onCancel, confirm
     if (type === "prompt") {
       onConfirm(inputValue);
     } else if (type === "replace") {
-      onConfirm(inputValue, secondInputValue); // שולח שני ערכים
+      onConfirm(inputValue, secondInputValue); 
     } else {
       onConfirm();
     }

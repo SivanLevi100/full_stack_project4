@@ -1,3 +1,5 @@
+
+//TextDisplay component
 import React from 'react';  
 import NoteHandle from './NoteHandle';   
 
